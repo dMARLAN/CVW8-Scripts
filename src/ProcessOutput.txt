@@ -1,0 +1,27 @@
+
+7-Zip 22.00 (x64) : Copyright (c) 1999-2022 Igor Pavlov : 2022-06-15
+
+Open archive: C:\Users\cpena\Documents\GitHub\CVW-8_Scripts\mission_files\awn1.miz
+
+WARNINGS:
+Headers Error
+
+--
+Path = C:\Users\cpena\Documents\GitHub\CVW-8_Scripts\mission_files\awn1.miz
+Type = zip
+WARNINGS:
+Headers Error
+Physical Size = 5084956
+
+Scanning the drive:
+1 file, 2411862 bytes (2356 KiB)
+
+Updating archive: C:\Users\cpena\Documents\GitHub\CVW-8_Scripts\mission_files\awn1.miz
+
+Keep old data in archive: 117 files, 5081464 bytes (4963 KiB)
+Add new data to archive: 1 file, 2411862 bytes (2356 KiB)
+
+
+Files read from disk: 1
+Archive size: 5084966 bytes (4966 KiB)
+Everything is Ok
