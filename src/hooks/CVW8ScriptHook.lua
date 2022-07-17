@@ -12,8 +12,8 @@ end
 function cvw8ScriptsHook.onTriggerMessage(message, duration, clearView)
     if (string.match(message,"CVW8Scripts: Load Mission: ")) then
         local mission = string.match(message,"CVW8Scripts:%sLoad Mission:%s(.*)")
-        net.log("[CVW8ScriptsHook]: Loading: " .. lfs.writedir() .. "Missions\\" .. mission .. ".miz")
-        net.load_mission(lfs.writedir() .. "Missions\\" .. mission .. ".miz")
+        net.log("[CVW8ScriptsHook]: Loading: " .. lfs.writedir() .. "Missions\\" .. phase .. "\\" .. mission .. ".miz")
+        net.load_mission(lfs.writedir() .. "Missions\\" .. phase .. "\\" .. mission .. ".miz")
     end
 end
 
