@@ -53,8 +53,8 @@ function restartMission(maxOverTime)
 end
 
 function loadNextMission(mission)
-    env.info("[TEST!]: CVW8Scripts: Load Mission: " .. mission)
-    trigger.action.outText("CVW8Scripts: Load Mission: " .. mission,10,false)
+    env.info("[TEST!]: CVW8Scripts: Load Mission: " .. phase .. "\\" .. mission)
+    trigger.action.outText("CVW8Scripts: Load Mission: " .. phase .. "\\" .. mission,10,false)
 end
 
 function getNextMissionName()
