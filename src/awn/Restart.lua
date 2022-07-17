@@ -6,10 +6,11 @@
 --- @author Marlan
 ---
 
+local getNumPlayerUnits, restartMission, getNextMissionName, invertMissionIdentifier, executeWeatherUpdate, loadNextMission
 local reminderCount = 0
 
 --- @return number
-local function getNumPlayerUnits()
+function getNumPlayerUnits()
     local numPlayerUnits = 0
     for _, side in pairs(coalition.side) do
         for _,_ in pairs(coalition.getPlayers(side)) do
@@ -21,15 +22,20 @@ end
 
 --- @param maxOverTime number maximum overtime until restart regardless of clients
 --- @return number returns interval for next attempt if cannot restart this attempt
-local function restartMission(maxOverTime)
+function restartMission(maxOverTime)
     local reminderIntervalInMins = 60
     local repeatInterval = 300
     local numPlayerUnits = getNumPlayerUnits()
     if(numPlayerUnits == 0 or timer.getTime() >= maxOverTime) then
         env.info("Restarting mission.")
-        trigger.action.setUserFlag("Restart",1) -- .miz requires Once -> Flag True ("Restart") -> Load Mission ("x.miz")
+        local nextMissionToLoad = getNextMissionName()
+        if (nextMissionToLoad ~= 0) then
+            cvw8utilities.setDataFile("mission",nextMissionToLoad .. ".miz")
+            executeWeatherUpdate()
+            loadNextMission(nextMissionToLoad)
+        end
     else
-        env.info("Cannot restart, " .. numPlayerUnits .. " player(s) present.")
+        env.info("Restart.lua: Cannot restart, " .. numPlayerUnits .. " player(s) present.")
         local timeRemaining = maxOverTime - timer.getTime()
         local timeRemainingInMinutes = timeRemaining / 60
         local flooredTimeRemainingInMinutes = math.floor(timeRemainingInMinutes)
@@ -44,6 +50,31 @@ local function restartMission(maxOverTime)
         end
         return timer.getTime() + repeatInterval -- Schedules next attempt to restart in repeatInterval seconds
     end
+end
+
+function loadNextMission(mission)
+    trigger.action.outText("CVW8Scripts: Load Mission: " .. mission,10,false)
+end
+
+function getNextMissionName()
+    if (string.match(string.sub(MISSION_NAME,#MISSION_NAME-1),"_%a")) then
+        local invertedMissionIdentifier = invertMissionIdentifier(MISSION_NAME)
+        if (invertedMissionIdentifier ~= 0) then
+            return string.sub(MISSION_NAME,0,#MISSION_NAME-1) .. invertedMissionIdentifier
+        end
+    end
+    env.info("Restart.lua: Could not match mission identifier")
+    return 0
+end
+
+function invertMissionIdentifier(missionName)
+    if (string.sub(missionName,#missionName) == "A") then return "B" end
+    if (string.sub(missionName,#missionName) == "B") then return "A" end
+    return 0
+end
+
+function executeWeatherUpdate()
+    os.execute("java -jar " .. SCRIPTS_PATH .. "weather-update.jar")
 end
 
 --- Main Method
