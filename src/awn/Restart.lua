@@ -75,8 +75,8 @@ function invertMissionIdentifier(missionName)
 end
 
 function executeWeatherUpdate()
-    env.info("[TEST!]: Executing JAR:  java -jar \"" .. SCRIPTS_PATH .. "weather-update.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
-    os.execute("java -jar \"" .. SCRIPTS_PATH .. "weather-update.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
+    env.info("[TEST!]: Executing JAR:  java -jar \"" .. SCRIPTS_PATH .. "\\weather-update.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
+    os.execute("java -jar \"" .. SCRIPTS_PATH .. "\\weather-update.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
 end
 
 --- Main Method
