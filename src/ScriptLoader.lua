@@ -5,8 +5,9 @@ CURRENT_PHASE = args[1]
 METOC_ACTIVE = args[2]
 SCRIPTS_PATH = args[3]
 
-local LIBRARIES_FOLDER_NAME = "libraries"
-WEATHER_OUTPUT_FOLDER_NAME = "weatheroutput"
+local LIBRARIES_FOLDER = "libraries"
+local CURRENT_PHASE_FOLDER = CURRENT_PHASE
+WEATHER_OUTPUT_FOLDER = "weatheroutput"
 
 local function loadAll(dir)
     for file in lfs.dir(dir) do
@@ -16,6 +17,6 @@ local function loadAll(dir)
     end
 end
 
-loadAll(SCRIPTS_PATH .. "\\" .. LIBRARIES_FOLDER_NAME)
-loadAll(SCRIPTS_PATH .. "\\" .. CURRENT_PHASE)
-loadAll(SCRIPTS_PATH .. "\\" .. WEATHER_OUTPUT_FOLDER_NAME)
+loadAll(SCRIPTS_PATH .. LIBRARIES_FOLDER)
+loadAll(SCRIPTS_PATH .. CURRENT_PHASE_FOLDER)
+loadAll(SCRIPTS_PATH .. WEATHER_OUTPUT_FOLDER)
