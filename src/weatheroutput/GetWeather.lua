@@ -314,8 +314,8 @@ end
 local function outputToDiscord(metar, stationId)
     cvw8utilities.setDataFile("icao",stationId)
     cvw8utilities.setDataFile("metar", metar)
-    env.info("[TEST!]: Executing JAR:  java -jar \"" .. SCRIPTS_PATH .. "weather-output.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
-    os.execute("java -jar \"" .. SCRIPTS_PATH .. "weather-output.jar\" ".. "\"" .. SCRIPTS_PATH .. "\"")
+    env.info("[TEST!]: Executing JAR:  java -jar \"" .. SCRIPTS_PATH .. "\\weather-output.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
+    os.execute("java -jar \"" .. SCRIPTS_PATH .. "\\weather-output.jar\" ".. "\"" .. SCRIPTS_PATH .. "\"")
 end
 
 --- @author Grimes
