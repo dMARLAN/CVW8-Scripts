@@ -310,20 +310,11 @@ end
 
 --- Writes (overwrites) file to DCS Root and executes DiscordWebHook.jar
 --- which will read the file and delete it afterwards.
---- @param metoc table formatted full METAR for data transfer
-local function outputToDiscord(metoc, stationId)
-    local readFile = io.open(SCRIPTS_PATH .. "\\Data.txt", "rb")
-    local fileContents = readFile:read("*all")
-    readFile:close()
-
-    fileContents = string.gsub(fileContents, "\"icao\":%s+\"(.[^\"]*)", "\"icao\": \"" .. "test2")
-    local writeFile = io.open(SCRIPTS_PATH .. "\\Data.txt", "w")
-    writeFile:write(fileContents)
-    writeFile:close()
-
-    env.info(fileContents)
-    env.info("java" .. " \"" .. SCRIPTS_PATH .. "\\" .. WEATHER_OUTPUT_FOLDER .. "\\DiscordWebHook.java\" " .. "\"" .. SCRIPTS_PATH .. "\"")
-    os.execute("java" .. " \"" .. SCRIPTS_PATH .. "\\" .. WEATHER_OUTPUT_FOLDER .. "\\DiscordWebHook.java\" " .. "\"" .. SCRIPTS_PATH .. "\"")
+--- @param metar table formatted full METAR for data transfer
+local function outputToDiscord(metar, stationId)
+    cvw8utilities.setDataFile("icao",stationId)
+    cvw8utilities.setDataFile("metar", metar)
+    os.execute("java -jar " .. SCRIPTS_PATH .. "weather-output.jar")
 end
 
 --- @author Grimes
