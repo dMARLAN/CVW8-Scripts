@@ -7,6 +7,7 @@ SCRIPTS_PATH = args[3]
 
 local LIBRARIES_FOLDER = "libraries"
 local CURRENT_PHASE_FOLDER = CURRENT_PHASE
+local UTILITIES_FOLDER = "utilities"
 WEATHER_OUTPUT_FOLDER = "weatheroutput"
 
 local function loadAll(dir)
@@ -18,5 +19,6 @@ local function loadAll(dir)
 end
 
 loadAll(SCRIPTS_PATH .. LIBRARIES_FOLDER)
+loadAll(SCRIPTS_PATH .. UTILITIES_FOLDER)
 loadAll(SCRIPTS_PATH .. CURRENT_PHASE_FOLDER)
 loadAll(SCRIPTS_PATH .. WEATHER_OUTPUT_FOLDER)
