@@ -1,4 +1,5 @@
 .idea/
 cvw8-scripts.iml
 src/Data.txt
+src/ProcessOutput.txt
 .idea/vcs.xml
