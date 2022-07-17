@@ -322,8 +322,8 @@ local function outputToDiscord(metoc, stationId)
     writeFile:close()
 
     env.info(fileContents)
-    env.info("java" .. " \"" .. SCRIPTS_PATH .. "\\" .. WEATHER_OUTPUT_FOLDER_NAME .. "\\DiscordWebHook.java\" " .. "\"" .. SCRIPTS_PATH .. "\"")
-    os.execute("java" .. " \"" .. SCRIPTS_PATH .. "\\" .. WEATHER_OUTPUT_FOLDER_NAME .. "\\DiscordWebHook.java\" " .. "\"" .. SCRIPTS_PATH .. "\"")
+    env.info("java" .. " \"" .. SCRIPTS_PATH .. "\\" .. WEATHER_OUTPUT_FOLDER .. "\\DiscordWebHook.java\" " .. "\"" .. SCRIPTS_PATH .. "\"")
+    os.execute("java" .. " \"" .. SCRIPTS_PATH .. "\\" .. WEATHER_OUTPUT_FOLDER .. "\\DiscordWebHook.java\" " .. "\"" .. SCRIPTS_PATH .. "\"")
 end
 
 --- @author Grimes
