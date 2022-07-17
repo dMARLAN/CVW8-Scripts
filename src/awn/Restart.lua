@@ -53,6 +53,7 @@ function restartMission(maxOverTime)
 end
 
 function loadNextMission(mission)
+    env.info("[TEST!]: CVW8Scripts: Load Mission: " .. mission)
     trigger.action.outText("CVW8Scripts: Load Mission: " .. mission,10,false)
 end
 
@@ -74,17 +75,20 @@ function invertMissionIdentifier(missionName)
 end
 
 function executeWeatherUpdate()
-    os.execute("java -jar " .. SCRIPTS_PATH .. "weather-update.jar")
+    env.info("[TEST!]: Executing JAR:  java -jar \"" .. SCRIPTS_PATH .. "weather-update.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
+    os.execute("java -jar \"" .. SCRIPTS_PATH .. "weather-update.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
 end
 
 --- Main Method
 local function main()
-    local restartTimeInHours = 1
-    local maximumOverTimeInHours = 8
-    local restartTimeInSeconds = restartTimeInHours * 3600
-    local maximumOverTimeInSeconds = maximumOverTimeInHours * 3600
-    local maxOverTime = timer.getTime() + restartTimeInSeconds
-    local localMaximumOverTime = timer.getTime() + maximumOverTimeInSeconds
-    timer.scheduleFunction(restartMission, localMaximumOverTime, maxOverTime)
+    --local restartTimeInHours = 1
+    --local maximumOverTimeInHours = 8
+    --local restartTimeInSeconds = restartTimeInHours * 3600
+    --local maximumOverTimeInSeconds = maximumOverTimeInHours * 3600
+    local restartTimeInSeconds = 5
+    local maximumOverTimeInSeconds = 10
+    local relativeRestartTimeInSeconds = timer.getTime() + restartTimeInSeconds
+    local relativeMaximumOverTimeInSeconds = timer.getTime() + maximumOverTimeInSeconds
+    timer.scheduleFunction(restartMission, relativeMaximumOverTimeInSeconds, relativeRestartTimeInSeconds)
 end
 main()
