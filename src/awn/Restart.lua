@@ -81,12 +81,10 @@ end
 
 --- Main Method
 local function main()
-    --local restartTimeInHours = 1
-    --local maximumOverTimeInHours = 8
-    --local restartTimeInSeconds = restartTimeInHours * 3600
-    --local maximumOverTimeInSeconds = maximumOverTimeInHours * 3600
-    local restartTimeInSeconds = 5
-    local maximumOverTimeInSeconds = 10
+    local restartTimeInHours = 1
+    local maximumOverTimeInHours = 8
+    local restartTimeInSeconds = restartTimeInHours * 3600
+    local maximumOverTimeInSeconds = maximumOverTimeInHours * 3600
     local relativeRestartTimeInSeconds = timer.getTime() + restartTimeInSeconds
     local relativeMaximumOverTimeInSeconds = timer.getTime() + maximumOverTimeInSeconds
     timer.scheduleFunction(restartMission, relativeMaximumOverTimeInSeconds, relativeRestartTimeInSeconds)
