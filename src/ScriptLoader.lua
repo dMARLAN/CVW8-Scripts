@@ -1,14 +1,13 @@
 require "lfs"
 
-local args={...}
-CURRENT_PHASE = args[1]
-METOC_ACTIVE = args[2]
-SCRIPTS_PATH = args[3]
+CURRENT_PHASE = "awn"
+METOC_ACTIVE = true
+SCRIPTS_PATH = lfs.writedir() .. "Missions\\" .. CURRENT_PHASE
 
 local LIBRARIES_FOLDER = "libraries"
 local CURRENT_PHASE_FOLDER = CURRENT_PHASE
 local UTILITIES_FOLDER = "utilities"
-WEATHER_OUTPUT_FOLDER = "weatheroutput"
+local WEATHER_OUTPUT_FOLDER = "weatheroutput"
 
 local function loadAll(dir)
     for file in lfs.dir(dir) do
