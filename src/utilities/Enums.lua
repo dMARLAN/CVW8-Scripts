@@ -83,6 +83,7 @@ THEATRE = {
     PERSIAN_GULF = "PersianGulf",
     MARIANA_ISLANDS = "MarianaIslands",
     SYRIA = "Syria",
+    SOUTH_ATLANTIC = "SouthAtlantic",
 }
 
 CONVERSION = {
@@ -119,5 +120,9 @@ BASES = {
     NELLIS_AFB = {
         NAME = "Nellis",
         CODE = "KLSV"
-    }
+    },
+    MOUNT_PLEASANT_AFB = {
+        NAME = "?????",
+        CODE = "EGYP"
+    },
 }
