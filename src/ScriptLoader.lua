@@ -1,7 +1,7 @@
 require "lfs"
 
-CURRENT_PHASE = "awn"
-METOC_ACTIVE = true
+CURRENT_PHASE = "awn" -- TODO: Get this from the data file
+METOC_ACTIVE = true --  TODO: Get this from the data file
 SCRIPTS_PATH = lfs.writedir() .. "Missions\\" .. CURRENT_PHASE
 
 local LIBRARIES_FOLDER = "libraries"
