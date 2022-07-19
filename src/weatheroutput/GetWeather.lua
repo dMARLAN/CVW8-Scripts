@@ -113,9 +113,10 @@ local function getDayAndTime24UTC()
     local timeChangeTbl = {}
     timeChangeTbl["Caucasus"] = 4
     timeChangeTbl["PersianGulf"] = 4
-    timeChangeTbl["Nevada"] = 17
-    timeChangeTbl["MarianaIslands"] = 3
+    timeChangeTbl["Nevada"] = -7
+    timeChangeTbl["MarianaIslands"] = -2
     timeChangeTbl["Syria"] = 3
+    timeChangeTbl["SouthAtlantic"] = 3
 
     if timeChangeTbl[theatre] then
         timeChange = timeChangeTbl[theatre]
@@ -125,10 +126,10 @@ local function getDayAndTime24UTC()
     end
 
     -- Time clamped to 24 hours
-    if hours - timeChange > 0 then
-        hours = (hours - timeChange)
+    if hours + timeChange > 0 then
+        hours = (hours + timeChange)
     else
-        hours = (hours - timeChange) + 24
+        hours = (hours + timeChange) + 24
     end
 
     -- Add leading zeroes
@@ -239,7 +240,6 @@ local function getCloudCover()
     cloudsPresetTbl["RainyPreset3"] = "RA OVC060 OVC190 SCT340"
 
     if cloudsPreset == nil or cloudsPresetTbl[cloudsPreset] == nil then
-        -- getOldClouds() -- TODO
         env.info("WARNING: Preset not detected")
         return "CAVOK"
     end
