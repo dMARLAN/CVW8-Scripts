@@ -56,7 +56,7 @@ end
 
 --- Gets Wind from DCS Weather in METAR format e.g. 180030KT
 --- @param weatherReferencePoint table point to read weather from
---- @return string windDirecton .. windSpeed .. "KT"
+--- @return string windDirection .. windSpeed .. "KT"
 local function getWind(weatherReferencePoint)
     local referencePoint = deepCopy(weatherReferencePoint)
     referencePoint.y = referencePoint.y + 15 -- Values less than 10 meters will always return 0
@@ -82,7 +82,9 @@ local function getWind(weatherReferencePoint)
 
     -- Add leading zeroes
     local windDirectionLeadingZeroes
-    if windDirection < 10 then
+    if windSpeed == 0 then
+        windDirectionLeadingZeroes = "000"
+    elseif windDirection < 10 then
         windDirectionLeadingZeroes = "00" .. windDirection
     elseif windDirection < 100 then
         windDirectionLeadingZeroes = "0" .. windDirection
@@ -133,7 +135,9 @@ local function getDayAndTime24UTC()
     end
 
     -- Add leading zeroes
-    if hours < 10 then
+    if hours == 24 then
+        hours = "00"
+    elseif hours < 10 then
         hours = "0" .. hours
     end
     if minutes < 10 then
@@ -358,7 +362,6 @@ local function main()
 
     outputToDiscord(metar, stationId) -- Pass METOC to DiscordWebHook.java so it can POST because Lua sucks
     env.info("METAR: " .. metar)
-    timer.scheduleFunction(main, nil, timer.getTime() + 3600)
 end
 
 -- Checks metocActive flag set inside Mission File triggers is true else do not run.
