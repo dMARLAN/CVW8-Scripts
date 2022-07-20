@@ -259,8 +259,7 @@ local function getPressureAltitude(weatherReferencePoint)
     local referencePoint = deepCopy(weatherReferencePoint)
     local _, QFEPasc = atmosphere.getTemperatureAndPressure(referencePoint)
     local QFEMilliBar = QFEPasc * CONVERSION.PASCAL_TO_MILLIBAR
-    local pressureAltitudeInFeet = 145366.45 * (1 - math.pow((QFEMilliBar / CONVERSION.STD_PRESSURE_MILLIBAR), 0.190284))
-    return pressureAltitudeInFeet
+    return 145366.45 * (1 - math.pow((QFEMilliBar / CONVERSION.STD_PRESSURE_MILLIBAR), 0.190284))
 end
 
 --- Calculates QNH from DCS Weather and returns in METAR format.
@@ -274,7 +273,6 @@ local function getQNHAltimeter(weatherReferencePoint)
     local fieldElevInMeters = referencePoint.y
     local pressureAltitude = getPressureAltitude(referencePoint)
     local altitudeDifference = (fieldElevInMeters * CONVERSION.METERS_TO_FEET) - pressureAltitude
-    referencePoint.y = 0
     local tempCorrectedQNHPasc = ((altitudeDifference / 27) * 100) + PRESSURE.STANDARD_PRESSURE_PASCAL
     local QNHInHg = tempCorrectedQNHPasc * CONVERSION.PASCALS_TO_INHG
     return "A" .. math.floor(QNHInHg + 0.5)
