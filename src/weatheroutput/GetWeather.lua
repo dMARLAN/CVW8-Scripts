@@ -9,7 +9,7 @@
 --- Selects a location based on currentPhase or if no phase,
 --- then selects a location based on the env.theatre.
 --- @return table, string
-local function getWeatherReferencePointAndStationId()
+local function getWeatherReferencePointAndStationId() -- TODO: Get location from Data File? (and remove stationId)
     local theatre = env.mission.theatre
     local location
     local stationId
@@ -113,12 +113,12 @@ local function getDayAndTime24UTC()
     local minutes = (time / 60) - (hours * 60)
     local timeChange
     local timeChangeTbl = {}
-    timeChangeTbl["Caucasus"] = 4
-    timeChangeTbl["PersianGulf"] = 4
-    timeChangeTbl["Nevada"] = -7
-    timeChangeTbl["MarianaIslands"] = -2
-    timeChangeTbl["Syria"] = 3
-    timeChangeTbl["SouthAtlantic"] = 3
+    timeChangeTbl["Caucasus"] = -4
+    timeChangeTbl["PersianGulf"] = -4
+    timeChangeTbl["Nevada"] = 7
+    timeChangeTbl["MarianaIslands"] = 2
+    timeChangeTbl["Syria"] = -3
+    timeChangeTbl["SouthAtlantic"] = -3
 
     if timeChangeTbl[theatre] then
         timeChange = timeChangeTbl[theatre]
@@ -127,17 +127,9 @@ local function getDayAndTime24UTC()
         timeChange = 0
     end
 
-    -- Time clamped to 24 hours
-    if hours + timeChange > 0 then
-        hours = (hours + timeChange)
-    else
-        hours = (hours + timeChange) + 24
-    end
+    hours = (hours + timeChange) % 24
 
-    -- Add leading zeroes
-    if hours == 24 then
-        hours = "00"
-    elseif hours < 10 then
+    if hours < 10 then
         hours = "0" .. hours
     end
     if minutes < 10 then
@@ -257,9 +249,9 @@ end
 --- @return number
 local function getPressureAltitude(weatherReferencePoint)
     local referencePoint = deepCopy(weatherReferencePoint)
-    local _, QFEPasc = atmosphere.getTemperatureAndPressure(referencePoint)
-    local QFEMilliBar = QFEPasc * CONVERSION.PASCAL_TO_MILLIBAR
-    return 145366.45 * (1 - math.pow((QFEMilliBar / CONVERSION.STD_PRESSURE_MILLIBAR), 0.190284))
+    local _, qfeHPA = atmosphere.getTemperatureAndPressure(referencePoint)
+    local qfeMB = qfeHPA * CONVERSION.PASCAL_TO_MILLIBAR
+    return 145366.45 * (1 - math.pow((qfeMB / CONVERSION.STD_PRESSURE_MILLIBAR), 0.190284))
 end
 
 --- Calculates QNH from DCS Weather and returns in METAR format.
@@ -274,8 +266,8 @@ local function getQNHAltimeter(weatherReferencePoint)
     local pressureAltitude = getPressureAltitude(referencePoint)
     local altitudeDifference = (fieldElevInMeters * CONVERSION.METERS_TO_FEET) - pressureAltitude
     local tempCorrectedQNHPasc = ((altitudeDifference / 27) * 100) + PRESSURE.STANDARD_PRESSURE_PASCAL
-    local QNHInHg = tempCorrectedQNHPasc * CONVERSION.PASCALS_TO_INHG
-    return "A" .. math.floor(QNHInHg + 0.5)
+    local qnhInHg = tempCorrectedQNHPasc * CONVERSION.PASCALS_TO_INHG
+    return "A" .. math.floor(qnhInHg + 0.5)
 end
 
 --- Calculates Temperature and Dew Point from DCS Weather
@@ -349,7 +341,7 @@ local function main()
         return -- EXPAND ON THIS ???
     end
 
-    local metar = stationId .. " " ..
+    local metar = stationId .. " " .. -- TODO: Read stationId from Data File (Write from weather-update)
             getDayAndTime24UTC() .. " " ..
             getWind(weatherReferencePoint) .. " " ..
             getVisibility() .. " " ..
