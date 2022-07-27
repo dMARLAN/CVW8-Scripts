@@ -6,62 +6,42 @@
 --- @author Marlan
 ---
 
---- Selects a location based on currentPhase or if no phase,
---- then selects a location based on the env.theatre.
---- @return table, string
-local function getWeatherReferencePointAndStationId() -- TODO: Get location from Data File? (and remove stationId)
-    local theatre = env.mission.theatre
-    local location
-    local stationId
-    -- currentPhase is global var from ScriptLoader.lua
-    -- Select location based on currentPhase
-    if string.find(CURRENT_PHASE, PHASE.TSTA) or string.find(CURRENT_PHASE, PHASE.DEPLOY) or CURRENT_PHASE == PHASE.C2X then
-        -- currentPhase uses a Carrier
-        location = BASES.CARRIER.NAME
-        stationId = BASES.CARRIER.CODE
-    elseif CURRENT_PHASE == PHASE.FRS or string.find(CURRENT_PHASE, PHASE.SFARP) then
-        -- currentPhase uses a field in Guam
-        location = BASES.ANDERSEN_AFB.NAME
-        stationId = BASES.ANDERSEN_AFB.CODE
-    elseif string.find(CURRENT_PHASE, PHASE.AWN) then
-        -- currentPhase uses a field in Nevada
-        location = BASES.NELLIS_AFB.NAME
-        stationId = BASES.NELLIS_AFB.CODE
-    else
-        -- Otherwise pick current theatre
-        -- WWII Theatres not included
-        if theatre == THEATRE.CAUCASUS then
-            location = BASES.BATUMI.NAME
-            stationId = BASES.BATUMI.CODE
-        elseif theatre == THEATRE.NEVADA then
-            location = BASES.NELLIS_AFB.NAME
-            stationId = BASES.NELLIS_AFB.CODE
-        elseif theatre == THEATRE.PERSIAN_GULF then
-            location = BASES.AL_DHAFRA_AFB.NAME
-            stationId = BASES.AL_DHAFRA_AFB.CODE
-        elseif theatre == THEATRE.MARIANA_ISLANDS then
-            location = BASES.ANDERSEN_AFB.NAME
-            stationId = BASES.ANDERSEN_AFB.CODE
-        elseif theatre == THEATRE.SYRIA then
-            location = BASES.INCIRLIK.NAME
-            stationId = BASES.INCIRLIK.CODE
-        elseif location == nil then
-            env.info("ERROR: Theatre not supported")
-            return nil, nil
-        end
-        env.info("WARNING: Phase unknown.")
+local getWind, getDayAndTime24UTC, getVisibility
+local getWeatherMods, getCloudCover, getPressureAltitude, getQnh
+local getTempDew, outputToDiscord, getStationId, getNearestAirbasePoint
+local writeAirbaseCoordinatesToFile
+
+
+
+function getNearestAirbasePoint()
+    local stationReferenceName = "StationReference"
+    local stationReference = trigger.misc.getZone(stationReferenceName)
+
+    local searchVolume = {
+        id = world.VolumeType.SPHERE,
+        params = {
+            point = stationReference.point,
+            radius = stationReference.radius
+        }
+    }
+
+    local airbaseFound
+    local located = function(located)
+        airbaseFound = located:getPoint()
     end
-    return Airbase.getByName(location):getPoint(), stationId
+    world.searchObjects(Object.Category.BASE, searchVolume, located)
+
+    if airbaseFound then
+        return airbaseFound
+    end
+    return stationReference.point
 end
 
---- Gets Wind from DCS Weather in METAR format e.g. 180030KT
---- @param weatherReferencePoint table point to read weather from
---- @return string windDirection .. windSpeed .. "KT"
-local function getWind(weatherReferencePoint)
-    local referencePoint = deepCopy(weatherReferencePoint)
-    referencePoint.y = referencePoint.y + 15 -- Values less than 10 meters will always return 0
+function getWind(referencePoint)
+    local referencePointY = referencePoint.y
+    referencePointY = referencePointY + 15 -- Values less than 10 meters will always return 0
 
-    local windVec = atmosphere.getWind(referencePoint)
+    local windVec = atmosphere.getWind({ referencePoint.x, referencePointY, referencePoint.z})
     local windSpeed = math.sqrt((windVec.z) ^ 2 + (windVec.x) ^ 2)
     windSpeed = windSpeed * CONVERSION.METERS_TO_KNOTS -- Meters to Knots
 
@@ -102,32 +82,33 @@ local function getWind(weatherReferencePoint)
     return windDirectionLeadingZeroes .. windSpeedLeadingZeroes .. "KT"
 end
 
---- Gets 24 Hour ZULU Time from DCS based on selected theatre.
---- Adds leading zeroes as appropriate.
---- e.g. 271230Z
---- @return string day .. hours .. minutes .. "Z"
-local function getDayAndTime24UTC()
+function getDayAndTime24UTC()
     local theatre = env.mission.theatre
     local time = timer.getAbsTime()
+    local day = os.date("%d")
     local hours = math.floor(time / 3600)
     local minutes = (time / 60) - (hours * 60)
-    local timeChange
-    local timeChangeTbl = {}
-    timeChangeTbl["Caucasus"] = -4
-    timeChangeTbl["PersianGulf"] = -4
-    timeChangeTbl["Nevada"] = 7
-    timeChangeTbl["MarianaIslands"] = 2
-    timeChangeTbl["Syria"] = -3
-    timeChangeTbl["SouthAtlantic"] = -3
+    local timeChangeToZulu
+    local timeChangeToZuluTbl = {}
+    timeChangeToZuluTbl["Caucasus"] = -4
+    timeChangeToZuluTbl["PersianGulf"] = -4
+    timeChangeToZuluTbl["Nevada"] = 7
+    timeChangeToZuluTbl["MarianaIslands"] = 2
+    timeChangeToZuluTbl["Syria"] = -3
+    timeChangeToZuluTbl["SouthAtlantic"] = -3
 
-    if timeChangeTbl[theatre] then
-        timeChange = timeChangeTbl[theatre]
+    if timeChangeToZuluTbl[theatre] then
+        timeChangeToZulu = timeChangeToZuluTbl[theatre]
     else
         env.info("ERROR: No time change set on this theatre")
-        timeChange = 0
+        timeChangeToZulu = 0
     end
 
-    hours = (hours + timeChange) % 24
+    hours = hours + timeChangeToZulu
+    if hours >= 24 then
+        hours = hours % 24
+        day = day + 1
+    end
 
     if hours < 10 then
         hours = "0" .. hours
@@ -139,11 +120,7 @@ local function getDayAndTime24UTC()
     return os.date("%d") .. hours .. minutes .. "Z"
 end
 
---- Gets visibility from DCS weather in METAR format.
---- Compares to fog and chooses minimum.
---- e.g. "3/4SM"
---- @return string
-local function getVisibility()
+function getVisibility()
     local weather = env.mission.weather
     local visibility = env.mission.weather.visibility.distance
 
@@ -169,12 +146,7 @@ local function getVisibility()
     end
 end
 
---- Gets weather modifications from DCS weather in METAR format.
---- Thunderstorm & Dust Storm not yet implemented.
---- Rain is currently handled in getCloudCover()
---- until ED/DCS improves current weather implementation
---- @return string
-local function getWeatherMods()
+function getWeatherMods()
     -- TODO: TS = Thunderstorm, DS = Dust Storm, -RA/RA/+RA
     local weatherMods = ""
     local weather = env.mission.weather
@@ -196,11 +168,7 @@ local function getWeatherMods()
     return weatherMods
 end
 
---- Gets Cloud Preset from DCS weather in METAR format.
---- If Cloud Preset is nil, returns "CAVOK"
---- Currently no other handling for a nil Cloud Preset.
---- @return string
-local function getCloudCover()
+function getCloudCover()
     local cloudsPreset = env.mission.weather.clouds.preset
     local cloudsPresetTbl = {}
 
@@ -236,51 +204,31 @@ local function getCloudCover()
     cloudsPresetTbl["RainyPreset3"] = "RA OVC060 OVC190 SCT340"
 
     if cloudsPreset == nil or cloudsPresetTbl[cloudsPreset] == nil then
-        env.info("WARNING: Preset not detected")
         return "CAVOK"
     end
 
     return cloudsPresetTbl[cloudsPreset]
 end
 
---- Calculates Pressure Altitude in feet at weatherReferencePoint elevation.
---- https://en.wikipedia.org/wiki/Pressure_altitude -> Pressure Altitude
---- @param weatherReferencePoint table point to read weather from
---- @return number
-local function getPressureAltitude(weatherReferencePoint)
-    local referencePoint = deepCopy(weatherReferencePoint)
+function getPressureAltitude(referencePoint)
     local _, qfeHPA = atmosphere.getTemperatureAndPressure(referencePoint)
     local qfeMB = qfeHPA * CONVERSION.PASCAL_TO_MILLIBAR
     return 145366.45 * (1 - math.pow((qfeMB / CONVERSION.STD_PRESSURE_MILLIBAR), 0.190284))
 end
 
---- Calculates QNH from DCS Weather and returns in METAR format.
---- Corrects for temperature
---- https://en.wikipedia.org/wiki/Pressure_altitude -> QNE
---- e.g. A2992
---- @param weatherReferencePoint table point to read weather from
---- @return string
-local function getQNHAltimeter(weatherReferencePoint)
-    local referencePoint = deepCopy(weatherReferencePoint)
-    local fieldElevInMeters = referencePoint.y
+function getQnh(referencePoint)
+    local referencePointY = referencePoint.y
     local pressureAltitude = getPressureAltitude(referencePoint)
-    local altitudeDifference = (fieldElevInMeters * CONVERSION.METERS_TO_FEET) - pressureAltitude
+    local altitudeDifference = (referencePointY * CONVERSION.METERS_TO_FEET) - pressureAltitude
     local tempCorrectedQNHPasc = ((altitudeDifference / 27) * 100) + PRESSURE.STANDARD_PRESSURE_PASCAL
     local qnhInHg = tempCorrectedQNHPasc * CONVERSION.PASCALS_TO_INHG
     return "A" .. math.floor(qnhInHg + 0.5)
 end
 
---- Calculates Temperature and Dew Point from DCS Weather
---- and returns in METAR format.
---- e.g. 30/11
---- See: https://www.flymac.co.uk/how-to-estimate-cloud-bases-and-heights/
---- Thanks to Snake122 & Bailey's Conversation
---- @param weatherReferencePoint table point to read weather from
---- @return string temperature .. "/" .. dew
-local function getTempDew(weatherReferencePoint)
-    local referencePoint = deepCopy(weatherReferencePoint)
+function getTempDew(referencePoint) -- TODO Improve Dew Calculation, not matching real world, maybe get from Data file instead?
+    local referencePointY = referencePoint.y
     local clouds = env.mission.weather.clouds
-    referencePoint.y = 0 -- Set Reference Point to Sea Level
+    referencePointY = 0 -- Set Reference Point to Sea Level
     local temperature, _ = atmosphere.getTemperatureAndPressure(referencePoint)
     temperature = temperature - CONVERSION.ZERO_CELCIUS_IN_KELVIN -- Convert to Celcius
 
@@ -302,59 +250,40 @@ local function getTempDew(weatherReferencePoint)
     return temperature .. "/" .. dew
 end
 
---- Writes (overwrites) file to DCS Root and executes DiscordWebHook.jar
---- which will read the file and delete it afterwards.
---- @param metar table formatted full METAR for data transfer
-local function outputToDiscord(metar, stationId)
-    cvw8utilities.setDataFile("icao",stationId)
-    cvw8utilities.setDataFile("metar", metar)
+function outputToDiscord(metar)
+    utilities.setFileJSONValue("metar", metar, "Data.txt")
     env.info("[TEST!]: Executing JAR:  java -jar \"" .. SCRIPTS_PATH .. "\\weather-output.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
     os.execute("java -jar \"" .. SCRIPTS_PATH .. "\\weather-output.jar\" ".. "\"" .. SCRIPTS_PATH .. "\"")
 end
 
---- @author Grimes
---- from mist.utils, thanks Grimes
---- @param object table object to be cloned
---- @return table cloned object
-function deepCopy(object)
-    local lookup_table = {}
-    local function _copy(_object)
-        if type(_object) ~= "table" then
-            return _object
-        elseif lookup_table[_object] then
-            return lookup_table[_object]
-        end
-        local new_table = {}
-        lookup_table[_object] = new_table
-        for index, value in pairs(_object) do
-            new_table[_copy(index)] = _copy(value)
-        end
-        return setmetatable(new_table, getmetatable(_object))
-    end
-    return _copy(object)
+function getStationId()
+    return utilities.getFileJSONValue("icao", "Data.txt")
 end
 
---- Main function; builds METOC and sends to DiscordWebHook.jar
-local function main()
-    local weatherReferencePoint, stationId = getWeatherReferencePointAndStationId()
-    if weatherReferencePoint == nil or stationId == nil then
-        return -- EXPAND ON THIS ???
-    end
+function writeAirbaseCoordinatesToFile(referencePoint)
+    local stationLatitude, stationLongitude, _ = coord.LOtoLL(referencePoint)
+    utilities.setFileJSONValue("station_latitude", stationLatitude, "Data.txt")
+    utilities.setFileJSONValue("station_longitude", stationLongitude, "Data.txt")
+end
 
-    local metar = stationId .. " " .. -- TODO: Read stationId from Data File (Write from weather-update)
+--- Main function; builds METOC and sends to weather-output.jar
+local function main()
+    local referencePoint = getNearestAirbasePoint()
+    writeAirbaseCoordinatesToFile(referencePoint)
+
+    local metar = getStationId() .. " " ..
             getDayAndTime24UTC() .. " " ..
-            getWind(weatherReferencePoint) .. " " ..
+            getWind(referencePoint) .. " " ..
             getVisibility() .. " " ..
             getWeatherMods() .. " " ..
             getCloudCover() .. " " ..
-            getTempDew(weatherReferencePoint) .. " " ..
-            getQNHAltimeter(weatherReferencePoint)
+            getTempDew(referencePoint) .. " " ..
+            getQnh(referencePoint)
 
-    outputToDiscord(metar, stationId) -- Pass METOC to DiscordWebHook.java so it can POST because Lua sucks
+    outputToDiscord(metar) -- Pass METOC to DiscordWebHook.java so it can POST because Lua sucks
     env.info("METAR: " .. metar)
 end
 
--- Checks metocActive flag set inside Mission File triggers is true else do not run.
 if METOC_ACTIVE then
     main()
 end
