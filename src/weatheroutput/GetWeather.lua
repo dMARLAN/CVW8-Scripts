@@ -124,13 +124,13 @@ function getVisibility()
 
     if weather.enable_fog == true then
         local fog = weather.fog
-        local fogVisibility = fog.visibility * CONVERSION.METERS_TO_FEET -- Meters to Feet
+        local fogVisibility = fog.visibility * CONVERSION.METERS_TO_FEET
         if fogVisibility < visibility then
             visibility = fogVisibility
         end
     end
 
-    visibility = visibility * CONVERSION.FEET_TO_STATUTORY_MILES -- Feet To Miles
+    visibility = visibility * CONVERSION.FEET_TO_STATUTORY_MILES
     if visibility < 0.25 then
         return "1/4SM"
     elseif visibility < 0.50 then
@@ -151,7 +151,7 @@ function getWeatherMods()
 
     if weather.enable_fog == true then
         local fog = weather.fog
-        local fogVisibility = fog.visibility * CONVERSION.METERS_TO_FEET -- Meters to Feet
+        local fogVisibility = fog.visibility * CONVERSION.METERS_TO_FEET
 
         if fogVisibility < 3300 then
             if fogVisibility < 1300 then
@@ -228,7 +228,7 @@ function getTempDew(referencePoint) -- TODO Improve Dew Calculation, not matchin
     local clouds = env.mission.weather.clouds
     referencePointY = 0 -- Set Reference Point to Sea Level
     local temperature, _ = atmosphere.getTemperatureAndPressure(referencePoint)
-    temperature = temperature - CONVERSION.ZERO_CELCIUS_IN_KELVIN -- Convert to Celcius
+    temperature = temperature - CONVERSION.ZERO_CELCIUS_IN_KELVIN
 
     -- Calculate Dew Point
     local cloudBase = clouds.base * CONVERSION.METERS_TO_FEET
@@ -281,7 +281,4 @@ local function main()
     outputToDiscord(metar) -- Pass METOC to DiscordWebHook.java so it can POST because Lua sucks
     env.info("METAR: " .. metar)
 end
-
-if METOC_ACTIVE then
-    main()
-end
+main()

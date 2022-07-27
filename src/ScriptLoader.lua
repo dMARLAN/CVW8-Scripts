@@ -1,7 +1,6 @@
 require "lfs"
 
 MISSION_SCRIPTS_FOLDER = "awn" -- TODO: Get this from the data file
-METOC_ACTIVE = true --  TODO: Get this from the data file
 SCRIPTS_PATH = lfs.writedir() .. "Missions\\" .. MISSION_SCRIPTS_FOLDER
 
 local LIBRARIES_FOLDER = "libraries"
