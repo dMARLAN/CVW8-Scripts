@@ -4,7 +4,7 @@ function utilities.setFileJSONValue(key, value, fileName)
     readFile:close()
 
     fileContents = string.gsub(fileContents, "\""..key.."\":%s+\"(.[^\"]*)", "\""..key.."\": \"" .. value)
-    local writeFile = io.open(SCRIPTS_PATH .. "\\Data.txt", "w")
+    local writeFile = io.open(SCRIPTS_PATH .. "\\" .. DATA_FILE, "w")
     writeFile:write(fileContents)
     writeFile:close()
 end

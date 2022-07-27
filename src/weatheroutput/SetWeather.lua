@@ -1,11 +1,11 @@
 local setWeather, createMenus
 
 function setWeather(weatherType)
-    utilities.setFileJSONValue("weather_type", weatherType, "Data.txt")
+    utilities.setFileJSONValue("weather_type", weatherType, DATA_FILE)
 
     local nextMissionToLoad = getNextMissionName()
     if (nextMissionToLoad ~= 0) then
-        utilities.setFileJSONValue("mission",nextMissionToLoad .. ".miz", "Data.txt")
+        utilities.setFileJSONValue("mission",nextMissionToLoad .. ".miz", DATA_FILE)
         executeWeatherUpdate()
         loadNextMission(nextMissionToLoad)
     end

@@ -30,7 +30,7 @@ function restartMission(maxOverTime)
         env.info("[CVW8Scripts-Restart.lua]: Restarting mission.")
         local nextMissionToLoad = getNextMissionName()
         if (nextMissionToLoad ~= 0) then
-            utilities.setFileJSONValue("mission",nextMissionToLoad .. ".miz", "Data.txt")
+            utilities.setFileJSONValue("mission",nextMissionToLoad .. ".miz", DATA_FILE)
             executeWeatherUpdate()
             loadNextMission(nextMissionToLoad)
         end
