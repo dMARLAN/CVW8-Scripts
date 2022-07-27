@@ -68,24 +68,6 @@ TANKERS = {
     }
 }
 
-PHASE = {
-    FRS = "frs",
-    SFARP = "sfarp",
-    TSTA = "tsta",
-    AWN = "awn",
-    C2X = "c2x",
-    DEPLOY = "deploy"
-}
-
-THEATRE = {
-    CAUCASUS = "Caucasus",
-    NEVADA = "Nevada",
-    PERSIAN_GULF = "PersianGulf",
-    MARIANA_ISLANDS = "MarianaIslands",
-    SYRIA = "Syria",
-    SOUTH_ATLANTIC = "SouthAtlantic",
-}
-
 CONVERSION = {
     PASCALS_TO_INHG = 0.0295299830714,
     METERS_TO_FEET = 3.28084,
@@ -97,26 +79,6 @@ CONVERSION = {
 }
 
 BASES = {
-    CARRIER = {
-        NAME = "USS Roosevelt",
-        CODE = "CVN71"
-    },
-    AL_DHAFRA_AFB = {
-        NAME = "Al Dhafra AFB",
-        CODE = "OMAM"
-    },
-    ANDERSEN_AFB = {
-        NAME = "Andersen AFB",
-        CODE = "PGUA"
-    },
-    BATUMI = {
-        NAME = "Batumi",
-        CODE = "UGSB"
-    },
-    INCIRLIK = {
-        NAME = "Incirlik",
-        CODE = "LTAG"
-    },
     NELLIS_AFB = {
         NAME = "Nellis",
         CODE = "KLSV"
@@ -124,5 +86,5 @@ BASES = {
     MOUNT_PLEASANT_AFB = {
         NAME = "?????",
         CODE = "EGYP"
-    },
+    }
 }
