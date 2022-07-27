@@ -5,6 +5,7 @@ function setWeather(weatherType)
 
     local nextMissionToLoad = getNextMissionName()
     if (nextMissionToLoad ~= 0) then
+        trigger.action.outText("Loading: " .. weatherType .. "/" .. nextMissionToLoad .. "...", 10)
         utilities.setFileJSONValue("mission",nextMissionToLoad .. ".miz", DATA_FILE)
         executeWeatherUpdate()
         loadNextMission(nextMissionToLoad)
