@@ -11,8 +11,6 @@ local getWeatherMods, getCloudCover, getPressureAltitude, getQnh
 local getTempDew, outputToDiscord, getStationId, getNearestAirbasePoint
 local writeAirbaseCoordinatesToFile
 
-
-
 function getNearestAirbasePoint()
     local stationReferenceName = "StationReference"
     local stationReference = trigger.misc.getZone(stationReferenceName)
