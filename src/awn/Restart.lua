@@ -6,7 +6,7 @@
 --- @author Marlan
 ---
 
-local getNumPlayerUnits, restartMission, getNextMissionName, invertMissionIdentifier, executeWeatherUpdate, loadNextMission
+local getNumPlayerUnits, restartMission
 local reminderCount = 0
 
 --- @return number
@@ -27,19 +27,19 @@ function restartMission(maxOverTime)
     local repeatInterval = 300
     local numPlayerUnits = getNumPlayerUnits()
     if(numPlayerUnits == 0 or timer.getTime() >= maxOverTime) then
-        env.info("Restarting mission.")
+        env.info("[CVW8Scripts-Restart.lua]: Restarting mission.")
         local nextMissionToLoad = getNextMissionName()
         if (nextMissionToLoad ~= 0) then
-            cvw8utilities.setDataFile("mission",nextMissionToLoad .. ".miz")
+            utilities.setFileJSONValue("mission",nextMissionToLoad .. ".miz", "Data.txt")
             executeWeatherUpdate()
             loadNextMission(nextMissionToLoad)
         end
     else
-        env.info("Restart.lua: Cannot restart, " .. numPlayerUnits .. " player(s) present.")
+        env.info("[CVW8Scripts-Restart.lua]: Cannot restart, " .. numPlayerUnits .. " player(s) present.")
         local timeRemaining = maxOverTime - timer.getTime()
         local timeRemainingInMinutes = timeRemaining / 60
         local flooredTimeRemainingInMinutes = math.floor(timeRemainingInMinutes)
-        local message = "Overtime: Server will restart in " .. flooredTimeRemainingInMinutes .. " minutes."
+        local message = "[CVW8Scripts-Restart.lua]: Server will restart in " .. flooredTimeRemainingInMinutes .. " minutes."
         if(reminderCount == reminderIntervalInMins) then
             trigger.action.outText(message , 10)
             reminderCount = 0
@@ -53,8 +53,8 @@ function restartMission(maxOverTime)
 end
 
 function loadNextMission(mission)
-    env.info("[TEST!]: CVW8Scripts: Load Mission: " .. CURRENT_PHASE .. "\\" .. mission)
-    trigger.action.outText("CVW8Scripts: Load Mission: " .. CURRENT_PHASE .. "\\" .. mission,10,false)
+    env.info("[CVW8Scripts-Restart.lua]: Load Mission: " .. MISSION_SCRIPTS_FOLDER .. "\\" .. mission)
+    trigger.action.outText("[CVW8Scripts-Restart.lua]: Load Mission: " .. MISSION_SCRIPTS_FOLDER .. "\\" .. mission,10,false)
 end
 
 function getNextMissionName()
@@ -64,7 +64,7 @@ function getNextMissionName()
             return string.sub(MISSION_NAME,0,#MISSION_NAME-1) .. invertedMissionIdentifier
         end
     end
-    env.info("Restart.lua: Could not match mission identifier")
+    env.info("[CVW8Scripts-Restart.lua]: Could not match mission identifier")
     return 0
 end
 
@@ -75,7 +75,7 @@ function invertMissionIdentifier(missionName)
 end
 
 function executeWeatherUpdate()
-    env.info("[TEST!]: Executing JAR:  java -jar \"" .. SCRIPTS_PATH .. "\\weather-update.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
+    env.info("[CVW8Scripts-Restart.lua]: Executing JAR:  java -jar \"" .. SCRIPTS_PATH .. "\\weather-update.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
     os.execute("java -jar \"" .. SCRIPTS_PATH .. "\\weather-update.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
 end
 
