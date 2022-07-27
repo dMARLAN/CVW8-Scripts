@@ -53,8 +53,8 @@ function restartMission(maxOverTime)
 end
 
 function loadNextMission(mission)
-    env.info("[CVW8Scripts-Restart.lua]: Load Mission: " .. MISSION_SCRIPTS_FOLDER .. "\\" .. mission)
-    trigger.action.outText("[CVW8Scripts-Restart.lua]: Load Mission: " .. MISSION_SCRIPTS_FOLDER .. "\\" .. mission,10,false)
+    env.info("[CVW8Scripts-Restart.lua]: Load Mission: " .. MISSION_FOLDER .. "\\" .. mission)
+    trigger.action.outText("[CVW8Scripts-Restart.lua]: Load Mission: " .. MISSION_FOLDER .. "\\" .. mission,10,false)
 end
 
 function getNextMissionName()
