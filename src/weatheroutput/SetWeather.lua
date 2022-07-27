@@ -5,7 +5,7 @@ function setWeather(weatherType)
 
     local nextMissionToLoad = MissionUtility.getNextMissionName()
     if (nextMissionToLoad ~= 0) then
-        trigger.action.outText("Loading: " .. weatherType .. "\\" .. nextMissionToLoad .. "...", 10)
+        trigger.action.outText("[CVW8Scripts-SetWeather.lua]: Loading: " .. weatherType .. "\\" .. nextMissionToLoad .. "...", 10)
         JsonUtility.setFileJSONValue("mission",nextMissionToLoad .. ".miz", DATA_FILE)
         JarUtility.executeJar("weather-update")
         MissionUtility.loadNextMission(nextMissionToLoad)
