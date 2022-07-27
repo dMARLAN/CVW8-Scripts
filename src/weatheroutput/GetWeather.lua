@@ -36,12 +36,15 @@ function getNearestAirbasePoint()
 end
 
 function getWind(referencePoint)
-    local referencePointY = referencePoint.y
-    referencePointY = referencePointY + 15 -- Values less than 10 meters will always return 0
+    local localReferencePoint = {}
+    localReferencePoint.x = referencePoint.x
+    localReferencePoint.y = referencePoint.y + 15 -- Values less than 10 meters will always return 0
+    localReferencePoint.z = referencePoint.z
 
-    local windVec = atmosphere.getWind({ referencePoint.x, referencePointY, referencePoint.z})
+    local windVec = atmosphere.getWind(localReferencePoint)
     local windSpeed = math.sqrt((windVec.z) ^ 2 + (windVec.x) ^ 2)
     windSpeed = windSpeed * CONVERSION.METERS_TO_KNOTS -- Meters to Knots
+    env.info("Wind Speed: " .. windSpeed)
 
     local windDirection = math.deg(math.atan2(windVec.z, windVec.x))
 
@@ -57,6 +60,7 @@ function getWind(referencePoint)
 
     windDirection = math.floor(windDirection + 0.5)
     windSpeed = math.floor(windSpeed + 0.5)
+    env.info("Wind Speed: " .. windSpeed)
 
     -- Add leading zeroes
     local windDirectionLeadingZeroes
@@ -224,10 +228,12 @@ function getQnh(referencePoint)
 end
 
 function getTempDew(referencePoint) -- TODO Improve Dew Calculation, not matching real world, maybe get from Data file instead?
-    local referencePointY = referencePoint.y
+    local localReferencePoint = {}
+    localReferencePoint.x = referencePoint.x
+    localReferencePoint.y = 0
+    localReferencePoint.z = referencePoint.z
     local clouds = env.mission.weather.clouds
-    referencePointY = 0 -- Set Reference Point to Sea Level
-    local temperature, _ = atmosphere.getTemperatureAndPressure(referencePoint)
+    local temperature, _ = atmosphere.getTemperatureAndPressure(localReferencePoint)
     temperature = temperature - CONVERSION.ZERO_CELCIUS_IN_KELVIN
 
     -- Calculate Dew Point
