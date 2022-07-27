@@ -8,6 +8,7 @@ function setWeather(weatherType)
         trigger.action.outText("[CVW8Scripts-SetWeather.lua]: Loading: " .. weatherType .. "\\" .. nextMissionToLoad .. "...", 10)
         JsonUtility.setFileJSONValue("mission",nextMissionToLoad .. ".miz", DATA_FILE)
         JarUtility.executeJar("weather-update")
+        JsonUtility.setFileJSONValue("weather_type", "real", DATA_FILE)
         MissionUtility.loadNextMission(nextMissionToLoad)
     end
 end
