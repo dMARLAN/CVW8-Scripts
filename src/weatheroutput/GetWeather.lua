@@ -276,7 +276,7 @@ local function main()
             getTempDew(referencePoint) .. " " ..
             getQnh(referencePoint)
 
-    outputToDiscord(metar) -- Pass METOC to DiscordWebHook.java so it can POST because Lua sucks
+    outputToDiscord(metar)
     env.info("METAR: " .. metar)
 end
 main()
