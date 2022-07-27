@@ -263,7 +263,6 @@ function writeAirbaseCoordinatesToFile(referencePoint)
     JsonUtility.setFileJSONValue("station_longitude", stationLongitude, DATA_FILE)
 end
 
---- Main function; builds METOC and sends to weather-output.jar
 local function main()
     local referencePoint = getNearestAirbasePoint()
     writeAirbaseCoordinatesToFile(referencePoint)
