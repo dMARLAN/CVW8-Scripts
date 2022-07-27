@@ -249,19 +249,18 @@ function getTempDew(referencePoint) -- TODO Improve Dew Calculation, not matchin
 end
 
 function outputToDiscord(metar)
-    utilities.setFileJSONValue("metar", metar, DATA_FILE)
-    env.info("[TEST!]: Executing JAR:  java -jar \"" .. SCRIPTS_PATH .. "\\weather-output.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
-    os.execute("java -jar \"" .. SCRIPTS_PATH .. "\\weather-output.jar\" ".. "\"" .. SCRIPTS_PATH .. "\"")
+    JsonUtility.setFileJSONValue("metar", metar, DATA_FILE)
+    JarUtility.executeJar("weather-output")
 end
 
 function getStationId()
-    return utilities.getFileJSONValue("icao", DATA_FILE)
+    return JsonUtility.getFileJSONValue("icao", DATA_FILE)
 end
 
 function writeAirbaseCoordinatesToFile(referencePoint)
     local stationLatitude, stationLongitude, _ = coord.LOtoLL(referencePoint)
-    utilities.setFileJSONValue("station_latitude", stationLatitude, DATA_FILE)
-    utilities.setFileJSONValue("station_longitude", stationLongitude, DATA_FILE)
+    JsonUtility.setFileJSONValue("station_latitude", stationLatitude, DATA_FILE)
+    JsonUtility.setFileJSONValue("station_longitude", stationLongitude, DATA_FILE)
 end
 
 --- Main function; builds METOC and sends to weather-output.jar
