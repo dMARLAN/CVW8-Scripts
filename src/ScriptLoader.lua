@@ -2,7 +2,7 @@ require "lfs"
 
 MISSION_SCRIPTS_FOLDER = "awn" -- TODO: Get this from the data file
 SCRIPTS_PATH = lfs.writedir() .. "Missions\\" .. MISSION_SCRIPTS_FOLDER
-DATA_FILE = "Data.json"
+DATA_FILE = "dao.json"
 
 local LIBRARIES_FOLDER = "libraries"
 local CURRENT_PHASE_FOLDER = MISSION_SCRIPTS_FOLDER
