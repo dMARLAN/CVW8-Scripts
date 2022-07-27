@@ -1,7 +1,5 @@
-cvw8utilities = {}
-
-function cvw8utilities.setDataFile(key,value)
-    local readFile = io.open(SCRIPTS_PATH .. "\\Data.txt", "rb")
+function utilities.setFileJSONValue(key, value, fileName)
+    local readFile = io.open(SCRIPTS_PATH .. "\\" .. fileName, "rb")
     local fileContents = readFile:read("*all")
     readFile:close()
 
@@ -9,4 +7,11 @@ function cvw8utilities.setDataFile(key,value)
     local writeFile = io.open(SCRIPTS_PATH .. "\\Data.txt", "w")
     writeFile:write(fileContents)
     writeFile:close()
+end
+
+function utilities.getFileJSONValue(key, fileName)
+    local readFile = io.open(SCRIPTS_PATH .. "\\" .. fileName, "rb")
+    local fileContents = readFile:read("*all")
+    readFile:close()
+    return string.match(fileContents, "\""..key.."\": \"(.[^\"]*)")
 end
