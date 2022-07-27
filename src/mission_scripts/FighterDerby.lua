@@ -89,7 +89,7 @@ function activateFighterDerby(fighterGroup)
         trigger.action.outTextForGroup(fighterGroupID, Group.getName(fighterGroup) .. ", the Fighter Derby is already active.", 15)
     else
         missionCommands.removeItemForGroup(fighterGroupID, fighterDerbyCommands[fighterGroupID])
-        fighterDerbyCommands[fighterGroupID] = missionCommands.addCommandForGroup(fighterGroupID, "Abort", fighterDerbyMenu[fighterGroupID], abortFighterDerby, {fighterGroup})
+        fighterDerbyCommands[fighterGroupID] = missionCommands.addCommandForGroup(fighterGroupID, "Abort", fighterDerbyMenu[fighterGroupID], abortFighterDerby, {fighterGroup, 5, true})
         activeFighterGroupID = fighterGroupID
         fighterDerbyActive = true
         runFighterDerby({ 0, fighterGroup })
@@ -111,9 +111,9 @@ function abortFighterDerby(fighterGroup_delay_doMessage)
     local delay = fighterGroup_delay_doMessage[2] or 1
     local doMessage = fighterGroup_delay_doMessage[3] or false
     local fighterGroupID = Group.getID(fighterGroup)
+    if (doMessage) then trigger.action.outTextForGroup(fighterGroupID, Group.getName(fighterGroup) .. ", Fighter Derby aborted.", 15) end
     timer.scheduleFunction(destroyAllRedFighterDerbyGroups, nil, timer.getTime() + delay)
     fighterDerbyActive = false
-    if (doMessage) then trigger.action.outTextForGroup(fighterGroupID, Group.getName(fighterGroup) .. ", Fighter Derby aborted.", 15) end
     missionCommands.removeItemForGroup(fighterGroupID, fighterDerbyCommands[fighterGroupID])
     fighterDerbyCommands[fighterGroupID] = missionCommands.addCommandForGroup(fighterGroupID, "Activate", fighterDerbyMenu[fighterGroupID], activateFighterDerby, fighterGroup)
 end
