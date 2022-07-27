@@ -28,11 +28,11 @@ function restartMission(maxOverTime)
     local numPlayerUnits = getNumPlayerUnits()
     if(numPlayerUnits == 0 or timer.getTime() >= maxOverTime) then
         env.info("[CVW8Scripts-Restart.lua]: Restarting mission.")
-        local nextMissionToLoad = getNextMissionName()
+        local nextMissionToLoad = MissionUtility.getNextMissionName()
         if (nextMissionToLoad ~= 0) then
-            utilities.setFileJSONValue("mission",nextMissionToLoad .. ".miz", DATA_FILE)
-            executeWeatherUpdate()
-            loadNextMission(nextMissionToLoad)
+            JsonUtility.setFileJSONValue("mission",nextMissionToLoad .. ".miz", DATA_FILE)
+            JarUtility.executeJar("weather-update")
+            MissionUtility.loadNextMission(nextMissionToLoad)
         end
     else
         env.info("[CVW8Scripts-Restart.lua]: Cannot restart, " .. numPlayerUnits .. " player(s) present.")
@@ -50,33 +50,6 @@ function restartMission(maxOverTime)
         end
         return timer.getTime() + repeatInterval -- Schedules next attempt to restart in repeatInterval seconds
     end
-end
-
-function loadNextMission(mission)
-    env.info("[CVW8Scripts-Restart.lua]: Load Mission: " .. MISSION_FOLDER .. "\\" .. mission)
-    trigger.action.outText("[CVW8Scripts-Restart.lua]: Load Mission: " .. MISSION_FOLDER .. "\\" .. mission,10,false)
-end
-
-function getNextMissionName()
-    if (string.match(string.sub(MISSION_NAME,#MISSION_NAME-1),"_%a")) then
-        local invertedMissionIdentifier = invertMissionIdentifier(MISSION_NAME)
-        if (invertedMissionIdentifier ~= 0) then
-            return string.sub(MISSION_NAME,0,#MISSION_NAME-1) .. invertedMissionIdentifier
-        end
-    end
-    env.info("[CVW8Scripts-Restart.lua]: Could not match mission identifier")
-    return 0
-end
-
-function invertMissionIdentifier(missionName)
-    if (string.sub(missionName,#missionName) == "A") then return "B" end
-    if (string.sub(missionName,#missionName) == "B") then return "A" end
-    return 0
-end
-
-function executeWeatherUpdate()
-    env.info("[CVW8Scripts-Restart.lua]: Executing JAR:  java -jar \"" .. SCRIPTS_PATH .. "\\weather-update.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
-    os.execute("java -jar \"" .. SCRIPTS_PATH .. "\\weather-update.jar\" " .. "\"" .. SCRIPTS_PATH .. "\"")
 end
 
 --- Main Method
