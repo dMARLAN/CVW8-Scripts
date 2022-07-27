@@ -1,14 +1,14 @@
 local setWeather, createMenus
 
 function setWeather(weatherType)
-    utilities.setFileJSONValue("weather_type", weatherType, DATA_FILE)
+    JsonUtility.setFileJSONValue("weather_type", weatherType, DATA_FILE)
 
-    local nextMissionToLoad = getNextMissionName()
+    local nextMissionToLoad = MissionUtility.getNextMissionName()
     if (nextMissionToLoad ~= 0) then
-        trigger.action.outText("Loading: " .. weatherType .. "/" .. nextMissionToLoad .. "...", 10)
-        utilities.setFileJSONValue("mission",nextMissionToLoad .. ".miz", DATA_FILE)
-        executeWeatherUpdate()
-        loadNextMission(nextMissionToLoad)
+        trigger.action.outText("Loading: " .. weatherType .. "\\" .. nextMissionToLoad .. "...", 10)
+        JsonUtility.setFileJSONValue("mission",nextMissionToLoad .. ".miz", DATA_FILE)
+        JarUtility.executeJar("weather-update")
+        MissionUtility.loadNextMission(nextMissionToLoad)
     end
 end
 
