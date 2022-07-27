@@ -1,6 +1,5 @@
 require "lfs"
 
-MISSION_FOLDER = "awn" -- TODO: set with doscript() ?
 SCRIPTS_PATH = lfs.writedir() .. "Missions\\" .. MISSION_FOLDER
 DATA_FILE = "dao.json"
 
@@ -18,7 +17,6 @@ local function loadAllLua(dir)
     end
 end
 
-utilities = {}
 loadAllLua(SCRIPTS_PATH .. "\\" .. LIBRARIES_FOLDER)
 loadAllLua(SCRIPTS_PATH .. "\\" .. UTILITIES_FOLDER)
 loadAllLua(SCRIPTS_PATH .. "\\" .. MODEL_FOLDER)
