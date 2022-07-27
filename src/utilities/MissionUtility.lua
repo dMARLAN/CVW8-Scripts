@@ -3,8 +3,8 @@ MissionUtility = {}
 local invertMissionIdentifier
 
 function MissionUtility.loadNextMission(mission)
-    env.info("[CVW8Scripts-MissionUtility.lua]: Load Mission: " .. MISSION_FOLDER .. "\\" .. mission)
-    trigger.action.outText("[CVW8Scripts-MissionUtility.lua]: Load Mission: " .. MISSION_FOLDER .. "\\" .. mission,10,false)
+    env.info("[CVW8Scripts-MissionUtility.lua]: Load Mission: " .. MISSION_FOLDER .. "\\" .. mission .. ".miz")
+    trigger.action.outText("[CVW8Scripts-MissionUtility.lua]: Load Mission: " .. MISSION_FOLDER .. "\\" .. mission .. ".miz",10,false)
 end
 
 function MissionUtility.getNextMissionName()
