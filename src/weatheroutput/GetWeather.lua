@@ -38,7 +38,7 @@ end
 function getWind(referencePoint)
     local localReferencePoint = {}
     localReferencePoint.x = referencePoint.x
-    localReferencePoint.y = (land.getHeight({localReferencePoint.x, localReferencePoint.z}) / CONVERSION.METERS_TO_FEET) + 10 -- Wind will return 0 within 10m of ground
+    localReferencePoint.y = (land.getHeight({x = localReferencePoint.x, z = localReferencePoint.z})) -- Wind will return 0 within 10m of ground
     localReferencePoint.z = referencePoint.z
 
     local windVec = atmosphere.getWind(localReferencePoint)
