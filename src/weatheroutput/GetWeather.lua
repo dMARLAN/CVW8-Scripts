@@ -38,13 +38,12 @@ end
 function getWind(referencePoint)
     local localReferencePoint = {}
     localReferencePoint.x = referencePoint.x
-    localReferencePoint.y = referencePoint.y + 15 -- Values less than 10 meters will always return 0
+    localReferencePoint.y = (land.getHeight({localReferencePoint.x, localReferencePoint.z}) / CONVERSION.METERS_TO_FEET) + 10 -- Wind will return 0 within 10m of ground
     localReferencePoint.z = referencePoint.z
 
     local windVec = atmosphere.getWind(localReferencePoint)
     local windSpeed = math.sqrt((windVec.z) ^ 2 + (windVec.x) ^ 2)
     windSpeed = windSpeed * CONVERSION.METERS_TO_KNOTS -- Meters to Knots
-    env.info("Wind Speed: " .. windSpeed)
 
     local windDirection = math.deg(math.atan2(windVec.z, windVec.x))
 
@@ -60,7 +59,6 @@ function getWind(referencePoint)
 
     windDirection = math.floor(windDirection + 0.5)
     windSpeed = math.floor(windSpeed + 0.5)
-    env.info("Wind Speed: " .. windSpeed)
 
     -- Add leading zeroes
     local windDirectionLeadingZeroes
@@ -219,9 +217,8 @@ function getPressureAltitude(referencePoint)
 end
 
 function getQnh(referencePoint)
-    local referencePointY = referencePoint.y
     local pressureAltitude = getPressureAltitude(referencePoint)
-    local altitudeDifference = (referencePointY * CONVERSION.METERS_TO_FEET) - pressureAltitude
+    local altitudeDifference = (referencePoint.y * CONVERSION.METERS_TO_FEET) - pressureAltitude
     local tempCorrectedQNHPasc = ((altitudeDifference / 27) * 100) + PRESSURE.STANDARD_PRESSURE_PASCAL
     local qnhInHg = tempCorrectedQNHPasc * CONVERSION.PASCALS_TO_INHG
     return "A" .. math.floor(qnhInHg + 0.5)
