@@ -1,12 +1,3 @@
----
---- Various Enums
---- @author Marlan
----
-
-PRESSURE = {
-    STANDARD_PRESSURE_PASCAL = 101325
-}
-
 RADIOS = {
     BTN_1 = "305.000",
     BTN_2 = "264.000",
@@ -68,23 +59,9 @@ TANKERS = {
     }
 }
 
-CONVERSION = {
-    PASCALS_TO_INHG = 0.0295299830714,
-    METERS_TO_FEET = 3.28084,
-    STD_PRESSURE_MILLIBAR = 1013.25,
-    METERS_TO_KNOTS = 1.94384,
-    FEET_TO_STATUTORY_MILES = 0.000189394,
-    PASCAL_TO_MILLIBAR = 0.01,
-    ZERO_CELCIUS_IN_KELVIN = 273.15
-}
-
 BASES = {
     NELLIS_AFB = {
         NAME = "Nellis",
         CODE = "KLSV"
     },
-    MOUNT_PLEASANT_AFB = {
-        NAME = "?????",
-        CODE = "EGYP"
-    }
 }

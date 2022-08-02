@@ -167,28 +167,28 @@ function sort(locations)
     local locationsNames = {}
 
     -- Sort location names
-    for location,_ in pairs(locations) do
+    for location, _ in pairs(locations) do
         table.insert(locationsNames, location)
     end
     table.sort(locationsNames)
 
     -- Sort groups and insert into sorted table
-    for _,locationName in ipairs (locationsNames) do
+    for _, locationName in ipairs(locationsNames) do
         local sortedLocationAndGroups = {}
         sortedLocationAndGroups.name = locationName
         sortedLocationAndGroups.groups = {}
 
         local locationGroups = {}
-        for _,group in pairs (locations[locationName]) do
-            table.insert(locationGroups,group)
+        for _, group in pairs(locations[locationName]) do
+            table.insert(locationGroups, group)
         end
         table.sort(locationGroups)
 
-        for _,group in ipairs (locationGroups) do
-            table.insert(sortedLocationAndGroups.groups,group)
+        for _, group in ipairs(locationGroups) do
+            table.insert(sortedLocationAndGroups.groups, group)
         end
 
-        table.insert(sortedLocations,sortedLocationAndGroups)
+        table.insert(sortedLocations, sortedLocationAndGroups)
     end
 
     return sortedLocations

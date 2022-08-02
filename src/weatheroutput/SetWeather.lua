@@ -1,15 +1,16 @@
 local setWeather, createMenus
+local THIS_FILE = DCSWeather.MODULE_NAME .. ".SetWeather"
 
 function setWeather(weatherType)
-    JsonUtility.setFileJSONValue("weather_type", weatherType, DATA_FILE)
+    DCSWeather.JSON.setValue("weather_type", weatherType, DCSWeather.DATA_FILE)
 
-    local nextMissionToLoad = MissionUtility.getNextMissionName()
+    local nextMissionToLoad = DCSWeather.Mission.getNextMissionName()
     if (nextMissionToLoad ~= 0) then
-        trigger.action.outText("[CVW8Scripts-SetWeather.lua]: Loading: " .. weatherType .. "\\" .. nextMissionToLoad .. "...", 10)
-        JsonUtility.setFileJSONValue("mission",nextMissionToLoad .. ".miz", DATA_FILE)
-        JarUtility.executeJar("weather-update")
-        JsonUtility.setFileJSONValue("weather_type", "real", DATA_FILE)
-        MissionUtility.loadNextMission(nextMissionToLoad)
+        trigger.action.outText("[DCSWeather.SetWeather]: Loading: " .. weatherType .. "\\" .. nextMissionToLoad .. "...", 10)
+        DCSWeather.JSON.setValue("mission", nextMissionToLoad .. ".miz", DCSWeather.DATA_FILE)
+        DCSWeather.JAR.execute("weather-update")
+        DCSWeather.JSON.setValue("weather_type", "real", DCSWeather.DATA_FILE)
+        DCSWeather.Mission.loadNextMission(nextMissionToLoad)
     end
 end
 
@@ -21,6 +22,7 @@ function createMenus()
 
     local clearNightConfirm = missionCommands.addSubMenu("Clear Night", setWeatherMenu)
     missionCommands.addCommand("Confirm", clearNightConfirm, setWeather, "clearNight")
+    DCSWeather.Logger.Info(THIS_FILE, "Created Set Weather Menus.")
 end
 
 local function main()
