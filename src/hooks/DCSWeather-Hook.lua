@@ -1,17 +1,10 @@
-require("io")
-
 local DCSWeatherHook = {}
 local DCSWeatherCallbacks = {}
 DCSWeatherHook.Logger = {}
-local printLog
 
 local THIS_FILE = "DCSWeather-Hook"
 local DCS_ROOT = lfs.currentdir()
 local DCS_SG = lfs.writedir()
-
-DCSWeatherHook.Logger.Info(THIS_FILE, "Loading...")
-DCSWeatherHook.Logger.Info(THIS_FILE, "DCS_ROOT: " .. DCS_ROOT)
-DCSWeatherHook.Logger.Info(THIS_FILE, "DCS_SG: " .. DCS_SG)
 
 function DCSWeatherCallbacks.onMissionLoadEnd()
     local THIS_METHOD = "DCSWeatherCallbacks.onMissionLoadEnd"
@@ -75,25 +68,33 @@ function DCSWeatherHook.desanitizeMissionScripting()
 end
 
 function DCSWeatherHook.Logger.Info(logSource, message)
-    printLog(logSource, message, "INFO    ")
+    DCSWeatherHook.Logger.printLog(logSource, message, "INFO    ")
 end
 
 function DCSWeatherHook.Logger.Warning(logSource, message)
-    printLog(logSource, message, "WARNING ")
+    DCSWeatherHook.Logger.printLog(logSource, message, "WARNING ")
 end
 
 function DCSWeatherHook.Logger.Error(logSource, message)
-    printLog(logSource, message, "ERROR   ")
+    DCSWeatherHook.Logger.printLog(logSource, message, "ERROR   ")
 end
 
-function printLog(logSource, message, level)
+function DCSWeatherHook.Logger.printLog(logSource, message, level)
     local time = os.date("%Y-%m-%d %H:%M:%S ")
-    local logFile = io.open(DCS_SG .. "logs\\" .. THIS_FILE .. ".log", "a")
+    local logFile = io.open(DCS_SG .. "Logs\\" .. THIS_FILE .. ".log", "a")
     io.write(logFile, time .. level .. "[" .. logSource .. "]: " .. message .. "\n")
     io.flush(logFile)
     io.close(logFile)
 end
 
-DCSWeatherHook.desanitizeMissionScripting()
-DCS.setUserCallbacks(DCSWeatherCallbacks)
-DCSWeatherHook.Logger.Info(THIS_FILE, "Loaded.")
+local function main()
+    DCSWeatherHook.Logger.Info(THIS_FILE, "Loading...")
+    DCSWeatherHook.Logger.Info(THIS_FILE, "DCS_ROOT: " .. DCS_ROOT)
+    DCSWeatherHook.Logger.Info(THIS_FILE, "DCS_SG: " .. DCS_SG)
+
+    DCSWeatherHook.desanitizeMissionScripting()
+    DCS.setUserCallbacks(DCSWeatherCallbacks)
+
+    DCSWeatherHook.Logger.Info(THIS_FILE, "Loaded.")
+end
+main()
