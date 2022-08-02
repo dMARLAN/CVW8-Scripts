@@ -302,6 +302,7 @@ function BuildMetar.outputMetar(metar)
     local THIS_METHOD = THIS_FILE .. ".outputMetar"
     DCSWeather.Logger.Info(THIS_METHOD, "Outputting METAR...")
     DCSWeather.JSON.setValue("metar", metar, DCSWeather.DAO)
+    DCSWeather.JSON.setValue("weather_type", "real", DCSWeather.DAO)
 
     if (DCSWeather.JSON.getValue("discord_api_key", DCSWeather.DAO) == "") then
         DCSWeather.Logger.Warning(THIS_METHOD, "No Discord API Key found, not sending METAR to Discord.")
@@ -313,7 +314,13 @@ end
 function BuildMetar.getStationId()
     local THIS_METHOD = THIS_FILE .. ".getStationId"
     DCSWeather.Logger.Info(THIS_METHOD, "Getting Station ID...")
-    return DCSWeather.JSON.getValue("icao", DCSWeather.DAO)
+    local icao = DCSWeather.JSON.getValue("icao", DCSWeather.DAO)
+    if (icao == "") then
+        DCSWeather.Logger.Warning(THIS_METHOD, "ICAO not found.")
+        return "UKN"
+    else
+        return icao
+    end
 end
 
 function BuildMetar.writeAirbaseCoordinatesToDataFile(referencePoint)
