@@ -317,7 +317,7 @@ function BuildMetar.getStationId()
     local icao = DCSWeather.JSON.getValue("icao", DCSWeather.DAO)
     if (icao == "") then
         DCSWeather.Logger.Warning(THIS_METHOD, "ICAO not found.")
-        return "UKN"
+        return "UNKN"
     else
         return icao
     end
