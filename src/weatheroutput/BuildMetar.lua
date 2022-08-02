@@ -303,7 +303,7 @@ function BuildMetar.outputMetar(metar)
     DCSWeather.Logger.Info(THIS_METHOD, "Outputting METAR...")
     DCSWeather.JSON.setValue("metar", metar, DCSWeather.DAO)
 
-    if (DCSWeather.JSON.getValue("discord_api_key", DCSWeather.DAO) == nil) then
+    if (DCSWeather.JSON.getValue("discord_api_key", DCSWeather.DAO) == "") then
         DCSWeather.Logger.Warning(THIS_METHOD, "No Discord API Key found, not sending METAR to Discord.")
         return
     end

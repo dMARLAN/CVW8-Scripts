@@ -42,7 +42,7 @@ function DCSWeather.JSON.getValue(key, fileName)
     local fileContents = io.read(readFile, "*all")
     io.close(readFile)
 
-    local value = string.match(fileContents, "\"" .. key .. "\": \"(.[^\"]*)")
+    local value = string.match(fileContents, key .. "\":%s+\"(%w*)")
     DCSWeather.Logger.Info(THIS_METHOD, "Key: \"" .. key .. "\" Value: \"" .. value .. "\" in File: \"" .. fileName .. "\" retrieved.")
     return value
 end
