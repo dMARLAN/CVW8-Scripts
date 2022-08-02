@@ -42,7 +42,7 @@ end
 
 function BuildMetar.getWind(referencePoint)
     local THIS_METHOD = THIS_FILE .. ".getWind"
-    DCSWeather.Logger.Info(THIS_METHOD, "Getting wind...")
+    DCSWeather.Logger.Info(THIS_METHOD, "Getting Wind...")
 
     local localReferencePoint = {}
     localReferencePoint.x = referencePoint.x
@@ -103,10 +103,10 @@ function BuildMetar.getDayAndTimeZulu()
     DCSWeather.Logger.Info(THIS_METHOD, "Theatre: " .. theatre)
 
     local time = timer.getAbsTime()
-    local day = os.date("%d") -- TODO: env.mission.date.Day ?
+    local day = env.mission.date.Day
     local hours = math.floor(time / 3600)
     local minutes = (time / 60) - (hours * 60)
-    DCSWeather.Logger.Info(THIS_METHOD, "Local Time: Day: " .. day .. "Hour: " .. hours .. "Minute: " .. minutes)
+    DCSWeather.Logger.Info(THIS_METHOD, "Local Time: Day: " .. day .. " Hour: " .. hours .. " Minute: " .. minutes)
 
     local timeChangeToZulu
     local timeChangeToZuluTbl = {}
@@ -123,9 +123,9 @@ function BuildMetar.getDayAndTimeZulu()
         DCSWeather.Logger.Warning(THIS_METHOD, "Theatre not detected, no time conversion set.")
         timeChangeToZulu = 0
     end
-    DCSWeather.Logger.Info(THIS_METHOD, "Zulu Time: Day: " .. day .. "Hour: " .. hours .. "Minute: " .. minutes)
+    DCSWeather.Logger.Info(THIS_METHOD, "Zulu Time: Day: " .. day .. " Hour: " .. hours .. " Minute: " .. minutes)
 
-    hours = hours + timeChangeToZulu
+    hours = math.abs(hours + timeChangeToZulu)
     if hours >= 24 then
         hours = hours % 24
         day = day + 1
