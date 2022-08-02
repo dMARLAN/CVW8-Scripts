@@ -1,6 +1,7 @@
 local BuildMetar = {}
 
 local THIS_FILE = DCSWeather.MODULE_NAME .. ".BuildMetar"
+local STATION_REFERENCE_ZONE_NAME = "StationReference"
 
 local STANDARD_PRESSURE_PASCAL = 101325
 local PASCALS_TO_INHG = 0.0295299830714
@@ -13,10 +14,8 @@ local ZERO_CELCIUS_IN_KELVIN = 273.15
 
 function BuildMetar.getNearestAirbasePoint()
     local THIS_METHOD = THIS_FILE .. ".getNearestAirbasePoint"
-    DCSWeather.Logger.Info(THIS_METHOD, "Getting nearest airbase point...")
 
-    local stationReferenceName = "StationReference"
-    local stationReference = trigger.misc.getZone(stationReferenceName)
+    local stationReference = trigger.misc.getZone(STATION_REFERENCE_ZONE_NAME)
 
     local searchVolume = {
         id = world.VolumeType.SPHERE,
@@ -42,13 +41,12 @@ end
 
 function BuildMetar.getWind(referencePoint)
     local THIS_METHOD = THIS_FILE .. ".getWind"
-    DCSWeather.Logger.Info(THIS_METHOD, "Getting Wind...")
 
     local localReferencePoint = {}
     localReferencePoint.x = referencePoint.x
     localReferencePoint.y = (land.getHeight({ x = localReferencePoint.x, z = localReferencePoint.z })) -- Wind will return 0 within 10m of ground
     localReferencePoint.z = referencePoint.z
-    DCSWeather.Logger.Info(THIS_METHOD, "Reference point: { x = " .. localReferencePoint.x .. ", y = " .. localReferencePoint.y .. ", z = " .. localReferencePoint.z .. " }")
+    DCSWeather.Logger.Info(THIS_METHOD, "Wind Reference point: { x = " .. localReferencePoint.x .. ", y = " .. localReferencePoint.y .. ", z = " .. localReferencePoint.z .. " }")
 
     local windVec = atmosphere.getWind(localReferencePoint)
     local windSpeed = math.sqrt((windVec.z) ^ 2 + (windVec.x) ^ 2)
@@ -97,7 +95,6 @@ end
 
 function BuildMetar.getDayAndTimeZulu()
     local THIS_METHOD = THIS_FILE .. ".getDayAndTime24UTC"
-    DCSWeather.Logger.Info(THIS_METHOD, "Getting Day and Time...")
 
     local theatre = env.mission.theatre
     DCSWeather.Logger.Info(THIS_METHOD, "Theatre: " .. theatre)
@@ -142,9 +139,6 @@ function BuildMetar.getDayAndTimeZulu()
 end
 
 function BuildMetar.getVisibility()
-    local THIS_METHOD = THIS_FILE .. ".getVisibility"
-    DCSWeather.Logger.Info(THIS_METHOD, "Getting Visibility...")
-
     local weather = env.mission.weather
     local visibility = env.mission.weather.visibility.distance
 
@@ -170,11 +164,7 @@ function BuildMetar.getVisibility()
     end
 end
 
-function BuildMetar.getWeatherMods()
-    -- TODO: TS = Thunderstorm, DS = Dust Storm, -RA/RA/+RA
-    local THIS_METHOD = THIS_FILE .. ".getWeatherMods"
-    DCSWeather.Logger.Info(THIS_METHOD, "Getting Weather Mods...")
-
+function BuildMetar.getWeatherMods() -- TODO: TS = Thunderstorm, DS = Dust Storm, -RA/RA/+RA
     local weatherMods = ""
     local weather = env.mission.weather
 
@@ -196,9 +186,6 @@ function BuildMetar.getWeatherMods()
 end
 
 function BuildMetar.getCloudCover()
-    local THIS_METHOD = THIS_FILE .. ".getCloudCover"
-    DCSWeather.Logger.Info(THIS_METHOD, "Getting Cloud Cover...")
-
     local cloudsPreset = env.mission.weather.clouds.preset
     local cloudsPresetTbl = {}
 
@@ -242,7 +229,6 @@ end
 
 function BuildMetar.getPressureAltitude(referencePoint)
     local THIS_METHOD = THIS_FILE .. ".getPressureAltitude"
-    DCSWeather.Logger.Info(THIS_METHOD, "Getting Pressure Altitude...")
 
     local _, qfeHPA = atmosphere.getTemperatureAndPressure(referencePoint)
     local qfeMB = qfeHPA * PASCAL_TO_MILLIBAR
@@ -253,9 +239,6 @@ function BuildMetar.getPressureAltitude(referencePoint)
 end
 
 function BuildMetar.getQnh(referencePoint)
-    local THIS_METHOD = THIS_FILE .. ".getQnh"
-    DCSWeather.Logger.Info(THIS_METHOD, "Getting QNH...")
-
     local pressureAltitude = BuildMetar.getPressureAltitude(referencePoint)
     local altitudeDifference = (referencePoint.y * METERS_TO_FEET) - pressureAltitude
     local tempCorrectedQNHPasc = ((altitudeDifference / 27) * 100) + STANDARD_PRESSURE_PASCAL
@@ -267,13 +250,12 @@ end
 function BuildMetar.getTempDew(referencePoint)
     -- TODO Improve Dew Calculation, not matching real world, maybe get from Data file instead?
     local THIS_METHOD = THIS_FILE .. ".getTempDew"
-    DCSWeather.Logger.Info(THIS_METHOD, "Getting Temp/Dew...")
 
     local localReferencePoint = {}
     localReferencePoint.x = referencePoint.x
     localReferencePoint.y = 0
     localReferencePoint.z = referencePoint.z
-    DCSWeather.Logger.Info(THIS_METHOD, "Reference point: { x = " .. localReferencePoint.x .. ", y = " .. localReferencePoint.y .. ", z = " .. localReferencePoint.z .. " }")
+    DCSWeather.Logger.Info(THIS_METHOD, "Temp/Dew Reference point: { x = " .. localReferencePoint.x .. ", y = " .. localReferencePoint.y .. ", z = " .. localReferencePoint.z .. " }")
 
     local clouds = env.mission.weather.clouds
     local temperature, _ = atmosphere.getTemperatureAndPressure(localReferencePoint)
@@ -300,7 +282,6 @@ end
 
 function BuildMetar.outputMetar(metar)
     local THIS_METHOD = THIS_FILE .. ".outputMetar"
-    DCSWeather.Logger.Info(THIS_METHOD, "Outputting METAR...")
     DCSWeather.JSON.setValue("metar", metar, DCSWeather.DAO)
     DCSWeather.JSON.setValue("weather_type", "real", DCSWeather.DAO)
 
@@ -313,7 +294,6 @@ end
 
 function BuildMetar.getStationId()
     local THIS_METHOD = THIS_FILE .. ".getStationId"
-    DCSWeather.Logger.Info(THIS_METHOD, "Getting Station ID...")
     local icao = DCSWeather.JSON.getValue("icao", DCSWeather.DAO)
     if (icao == "") then
         DCSWeather.Logger.Warning(THIS_METHOD, "ICAO not found.")
@@ -325,7 +305,6 @@ end
 
 function BuildMetar.writeAirbaseCoordinatesToDataFile(referencePoint)
     local THIS_METHOD = THIS_FILE .. ".writeAirbaseCoordinatesToDataFile"
-    DCSWeather.Logger.Info(THIS_METHOD, "Writing Airbase Coordinates to DAO...")
 
     local stationLatitude, stationLongitude, _ = coord.LOtoLL(referencePoint)
     DCSWeather.JSON.setValue("station_latitude", stationLatitude, DCSWeather.DAO)
