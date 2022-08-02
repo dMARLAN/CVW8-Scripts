@@ -21,7 +21,7 @@ function restartMission(maxOverTime)
         env.info("[DCS-Weather-Restart.lua]: Restarting mission.")
         local nextMissionToLoad = DCSWeather.Mission.getNextMissionName()
         if (nextMissionToLoad ~= 0) then
-            DCSWeather.JSON.setValue("mission", nextMissionToLoad .. ".miz", DCSWeather.DATA_FILE)
+            DCSWeather.JSON.setValue("mission", nextMissionToLoad .. ".miz", DCSWeather.DAO)
             DCSWeather.JAR.execute("weather-update")
             DCSWeather.Mission.loadNextMission(nextMissionToLoad)
         end

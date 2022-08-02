@@ -2,14 +2,14 @@ local setWeather, createMenus
 local THIS_FILE = DCSWeather.MODULE_NAME .. ".SetWeather"
 
 function setWeather(weatherType)
-    DCSWeather.JSON.setValue("weather_type", weatherType, DCSWeather.DATA_FILE)
+    DCSWeather.JSON.setValue("weather_type", weatherType, DCSWeather.DAO)
 
     local nextMissionToLoad = DCSWeather.Mission.getNextMissionName()
     if (nextMissionToLoad ~= 0) then
         trigger.action.outText("[DCSWeather.SetWeather]: Loading: " .. weatherType .. "\\" .. nextMissionToLoad .. "...", 10)
-        DCSWeather.JSON.setValue("mission", nextMissionToLoad .. ".miz", DCSWeather.DATA_FILE)
+        DCSWeather.JSON.setValue("mission", nextMissionToLoad .. ".miz", DCSWeather.DAO)
         DCSWeather.JAR.execute("weather-update")
-        DCSWeather.JSON.setValue("weather_type", "real", DCSWeather.DATA_FILE)
+        DCSWeather.JSON.setValue("weather_type", "real", DCSWeather.DAO)
         DCSWeather.Mission.loadNextMission(nextMissionToLoad)
     end
 end
