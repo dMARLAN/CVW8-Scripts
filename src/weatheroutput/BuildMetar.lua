@@ -298,18 +298,19 @@ function BuildMetar.getTempDew(referencePoint)
     return temperature .. "/" .. dew
 end
 
-function BuildMetar.outputToDiscord(metar)
-    local THIS_METHOD = THIS_FILE .. ".outputToDiscord"
-    DCSWeather.Logger.Info(THIS_METHOD, "Outputting METAR to Discord...")
+function BuildMetar.outputMetar(metar)
+    local THIS_METHOD = THIS_FILE .. ".outputMetar"
+    DCSWeather.Logger.Info(THIS_METHOD, "Outputting METAR...")
 
-    DCSWeather.JSON.setValue("metar", metar, DCSWeather.DATA_FILE)
+    DCSWeather.JSON.getValue("discord_api_key")
+    DCSWeather.JSON.setValue("metar", metar, DCSWeather.DAO)
     DCSWeather.JAR.execute("weather-output")
 end
 
 function BuildMetar.getStationId()
     local THIS_METHOD = THIS_FILE .. ".getStationId"
     DCSWeather.Logger.Info(THIS_METHOD, "Getting Station ID...")
-    return DCSWeather.JSON.getValue("icao", DCSWeather.DATA_FILE)
+    return DCSWeather.JSON.getValue("icao", DCSWeather.DAO)
 end
 
 function BuildMetar.writeAirbaseCoordinatesToDataFile(referencePoint)
@@ -317,8 +318,8 @@ function BuildMetar.writeAirbaseCoordinatesToDataFile(referencePoint)
     DCSWeather.Logger.Info(THIS_METHOD, "Writing Airbase Coordinates to Data File...")
 
     local stationLatitude, stationLongitude, _ = coord.LOtoLL(referencePoint)
-    DCSWeather.JSON.setValue("station_latitude", stationLatitude, DCSWeather.DATA_FILE)
-    DCSWeather.JSON.setValue("station_longitude", stationLongitude, DCSWeather.DATA_FILE)
+    DCSWeather.JSON.setValue("station_latitude", stationLatitude, DCSWeather.DAO)
+    DCSWeather.JSON.setValue("station_longitude", stationLongitude, DCSWeather.DAO)
 end
 
 function BuildMetar.main()
@@ -359,6 +360,6 @@ function BuildMetar.main()
             qnh
 
     DCSWeather.Logger.Info(THIS_FILE, "METAR: " .. metar)
-    BuildMetar.outputToDiscord(metar)
+    BuildMetar.outputMetar(metar)
 end
 BuildMetar.main()
