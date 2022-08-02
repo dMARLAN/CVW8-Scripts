@@ -21,7 +21,7 @@ function DCSWeather.JSON.setValue(key, value, fileName)
     local fileContents = io.read(readFile, "*all")
     io.close(readFile)
 
-    fileContents = string.gsub(fileContents, "\"" .. key .. "\":%s+\"(.[^\"]*)", "\"" .. key .. "\": \"" .. value)
+    fileContents = string.gsub(fileContents, "(\"" .. key .. "[%w\": ,]+)", "\"" .. key .. "\": \"" .. value .. "\",")
     local writeFile = io.open(dataFilePath, "w")
     io.write(writeFile, fileContents)
     io.flush(writeFile)
