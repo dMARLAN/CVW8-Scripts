@@ -301,10 +301,13 @@ end
 function BuildMetar.outputMetar(metar)
     local THIS_METHOD = THIS_FILE .. ".outputMetar"
     DCSWeather.Logger.Info(THIS_METHOD, "Outputting METAR...")
-
-    DCSWeather.JSON.getValue("discord_api_key")
     DCSWeather.JSON.setValue("metar", metar, DCSWeather.DAO)
-    DCSWeather.JAR.execute("weather-output")
+
+    if (DCSWeather.JSON.getValue("discord_api_key", DCSWeather.DAO) == nil) then
+        DCSWeather.Logger.Warning(THIS_METHOD, "No Discord API Key found, not sending METAR to Discord.")
+        return
+    end
+    DCSWeather.JAR.execute("weather-output") -- TODO: Split out Sheets to a different Program
 end
 
 function BuildMetar.getStationId()
@@ -315,7 +318,7 @@ end
 
 function BuildMetar.writeAirbaseCoordinatesToDataFile(referencePoint)
     local THIS_METHOD = THIS_FILE .. ".writeAirbaseCoordinatesToDataFile"
-    DCSWeather.Logger.Info(THIS_METHOD, "Writing Airbase Coordinates to Data File...")
+    DCSWeather.Logger.Info(THIS_METHOD, "Writing Airbase Coordinates to DAO...")
 
     local stationLatitude, stationLongitude, _ = coord.LOtoLL(referencePoint)
     DCSWeather.JSON.setValue("station_latitude", stationLatitude, DCSWeather.DAO)
