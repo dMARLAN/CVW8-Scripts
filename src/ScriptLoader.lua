@@ -2,6 +2,8 @@ require "lfs"
 
 local LIBRARIES = "libraries"
 local MISSION_SCRIPTS = "mission_scripts"
+local MODULE_NAME = "CVW8-Scripts"
+local THIS_FILE = MODULE_NAME .. ".ScriptLoader"
 
 local function loadAllLua(folder)
     local dir = DCSWeather.SCRIPTS_PATH .. "\\" .. folder
