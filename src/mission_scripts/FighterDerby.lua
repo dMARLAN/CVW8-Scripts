@@ -1,4 +1,5 @@
-local handler = {}
+local groupMenuHandler = {}
+local playerHitHandler = {}
 local RED_FIGHTER_NAME_PREFIX = "FTR Derby Red Air "
 local FIGHTER_DERBY_CENTROID_ZONE = "FTR Derby Centroid"
 local FIGHTER_DERBY_ZONE = "FTR Derby Arena"
@@ -103,7 +104,7 @@ function abortFighterDerby(fighterGroup_delay_doMessage)
     fighterDerbyCommands[fighterGroupID] = missionCommands.addCommandForGroup(fighterGroupID, "Activate", fighterDerbyMenu[fighterGroupID], activateFighterDerby, fighterGroup)
 end
 
-function handler:onEvent(event)
+function groupMenuHandler:onEvent(event)
     if event.id == world.event.S_EVENT_BIRTH and event.initiator:getPlayerName() ~= nil then
         local fighterGroup = event.initiator:getGroup()
         local fighterGroupID = Group.getID(fighterGroup)
@@ -111,6 +112,9 @@ function handler:onEvent(event)
             generateGroupMenu(fighterGroup)
         end
     end
+end
+
+function playerHitHandler:onEvent(event)
     -- Gets hit event on any player
     if event.id == world.event.S_EVENT_HIT and event.target:getPlayerName() ~= nil then
         local fighterGroup = event.target:getGroup()
@@ -129,6 +133,7 @@ function generateGroupMenu(fighterGroup)
 end
 
 local function main()
-    world.addEventHandler(handler)
+    world.addEventHandler(groupMenuHandler)
+    world.addEventHandler(playerHitHandler)
 end
 main()
