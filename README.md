@@ -1,7 +1,3 @@
-# cvw8-scripts
+# CVW8-Scripts
 
-phase = "awn"
-metocActive = true
-path = lfs.writedir() .. "Missions\\" .. phase .. "\\"
-loadfile(path.."ScriptLoader.lua")(phase,metocActive,path)
- 
+Collection of Lua Scripts for Virtual CVW-8 DCS Group
