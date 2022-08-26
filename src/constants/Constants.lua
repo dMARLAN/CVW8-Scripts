@@ -51,13 +51,13 @@ TANKERS = {
         TCN_FREQ = 45,
         TCN_ID = "SL5",
         BTN = RADIOS.BTN_18,
-        ALT = 6000
+        ALT = 5000
     },
     SL61 = {
         TCN_FREQ = 46,
         TCN_ID = "SL6",
         BTN = RADIOS.BTN_19,
-        ALT = 7000
+        ALT = 6000
     }
 }
 
