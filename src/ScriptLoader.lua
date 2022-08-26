@@ -1,7 +1,8 @@
 require "lfs"
 
-local LIBRARIES = "libraries"
-local MISSION_SCRIPTS = "mission_scripts"
+local LIBRARIES_FOLDER = "libraries"
+local CONSTANTS_FOLDER = "constants"
+local MISSION_SCRIPTS_FOLDER = "mission_scripts"
 local MODULE_NAME = "CVW8-Scripts"
 local THIS_FILE = MODULE_NAME .. ".ScriptLoader"
 
@@ -15,5 +16,6 @@ local function loadAllLua(folder)
     end
 end
 
-loadAllLua(LIBRARIES)
-loadAllLua(MISSION_SCRIPTS)
+loadAllLua(LIBRARIES_FOLDER)
+loadAllLua(CONSTANTS_FOLDER)
+loadAllLua(MISSION_SCRIPTS_FOLDER)
