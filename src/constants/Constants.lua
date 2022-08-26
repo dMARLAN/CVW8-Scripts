@@ -26,32 +26,38 @@ TANKERS = {
     TO11 = {
         TCN_FREQ = 41,
         TCN_ID = "TO1",
-        BTN = RADIOS.BTN_13
+        BTN = RADIOS.BTN_13,
+        ALT = 22000
     },
     TO21 = {
         TCN_FREQ = 42,
         TCN_ID = "TO2",
-        BTN = RADIOS.BTN_14
+        BTN = RADIOS.BTN_14,
+        ALT = 24000
     },
     AO31 = {
         TCN_FREQ = 43,
         TCN_ID = "AO3",
-        BTN = RADIOS.BTN_15
+        BTN = RADIOS.BTN_15,
+        ALT = 21000
     },
     AO41 = {
         TCN_FREQ = 44,
         TCN_ID = "AO4",
-        BTN = RADIOS.BTN_17
+        BTN = RADIOS.BTN_17,
+        ALt = 23000
     },
     SL51 = {
         TCN_FREQ = 45,
         TCN_ID = "SL5",
-        BTN = RADIOS.BTN_18
+        BTN = RADIOS.BTN_18,
+        ALT = 6000
     },
     SL61 = {
         TCN_FREQ = 46,
         TCN_ID = "SL6",
-        BTN = RADIOS.BTN_19
+        BTN = RADIOS.BTN_19,
+        ALT = 7000
     }
 }
 
