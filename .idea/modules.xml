@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/cvw8-scripts.iml" filepath="$PROJECT_DIR$/cvw8-scripts.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CVW8-Scripts.iml" filepath="$PROJECT_DIR$/CVW8-Scripts.iml" />
     </modules>
   </component>
 </project>
