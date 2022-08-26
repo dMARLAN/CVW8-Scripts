@@ -3,7 +3,7 @@
 --------------------
 
 --- TEXACO 11
-local TO11 = RECOVERYTANKER:New("Tanker Track", "TO11")
+local TO11 = RECOVERYTANKER:New("SOCKEYE Track", "TO11")
 local TO11_alt = 22000
 TO11:SetCallsign(CALLSIGN.Tanker.Texaco, 1)
 TO11:SetTakeoffAir()
@@ -15,7 +15,7 @@ TO11:SetRacetrackDistances(15, 0)
 TO11:__Start(5)
 
 --- TEXACO 21
-local TO21 = RECOVERYTANKER:New("Tanker Track", "TO21")
+local TO21 = RECOVERYTANKER:New("SOCKEYE Track", "TO21")
 local TO21_alt = 24000
 TO21:SetCallsign(CALLSIGN.Tanker.Texaco, 2)
 TO21:SetTakeoffAir()
@@ -27,8 +27,8 @@ TO21:SetRacetrackDistances(15, 0)
 TO21:__Start(10)
 
 --- ARCO 31
-local AO31 = RECOVERYTANKER:New("Tanker Track 2", "AO31")
-local AO31_alt = 23000
+local AO31 = RECOVERYTANKER:New("SNAKEHEAD Track", "AO31")
+local AO31_alt = 21000
 AO31:SetCallsign(CALLSIGN.Tanker.Arco, 3)
 AO31:SetTakeoffAir()
 AO31:SetAltitude(AO31_alt)
@@ -37,6 +37,18 @@ AO31:SetSpeed(UTILS.KnotsToAltKIAS(TANKERS.SPEED, AO31_alt))
 AO31:SetTACAN(TANKERS.AO31.TCN_FREQ, TANKERS.AO31.TCN_ID)
 AO31:SetRacetrackDistances(15, 0)
 AO31:__Start(10)
+
+--- ARCO 41
+local AO41 = RECOVERYTANKER:New("SNAKEHEAD Track", "AO41")
+local AO41_alt = 23000
+AO41:SetCallsign(CALLSIGN.Tanker.Arco, 4)
+AO41:SetTakeoffAir()
+AO41:SetAltitude(AO41_alt)
+AO41:SetRadio(TANKERS.AO41.BTN)
+AO41:SetSpeed(UTILS.KnotsToAltKIAS(TANKERS.SPEED, AO41_alt))
+AO41:SetTACAN(TANKERS.AO41.TCN_FREQ, TANKERS.AO41.TCN_ID)
+AO41:SetRacetrackDistances(15, 0)
+AO41:__Start(10)
 
 --------------------
 --- AWACS Track ----
