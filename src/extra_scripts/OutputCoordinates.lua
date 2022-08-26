@@ -1,15 +1,5 @@
----
---- Gets all units in a DCS mission and outputs their coordinates
---- in both DDMMSSss and DDMMmmm format with altitude in feet
---- to unitscoordinates.txt file in DCS Root
---- Requires desanitized MissionScripting.lua (printToFile)
---- @author MARLAN
----
-
 local createUnitCoordinatesList, convertLL, printToFile
 
---- @param unitCoordinatesList
---- @return string
 function createUnitCoordinatesList(unitCoordinatesList)
     for _, side in pairs(coalition.side) do
         for _, group in pairs(coalition.getGroups(side)) do
@@ -37,19 +27,12 @@ function createUnitCoordinatesList(unitCoordinatesList)
     return unitCoordinatesList
 end
 
---- @param unitCoordinatesList
 function printToFile(unitCoordinatesList)
     local file = io.open("unitcoordinates.txt", "w")
     file:write(unitCoordinatesList)
     io.close(file)
 end
 
---- Converts and formats lat/lon in DDdd.. to either
---- DDMMmmm or DDMMSSss based on conversionType string param
---- @param lat
---- @param lon
---- @param conversionType
---- @return string, string
 function convertLL(lat, lon, conversionType)
     local latCardinal
     local lonCardinal
