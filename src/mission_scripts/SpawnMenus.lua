@@ -131,7 +131,9 @@ function despawn(name)
     if ref.category == "static" then
         StaticObject.destroy(StaticObject.getByName(name))
     else
-        Group.destroy(Group.getByName(name))
+        if (Group.getByName(name)) then
+            Group.destroy(Group.getByName(name))
+        end
     end
     trigger.action.outText(removeSymbols(name) .. getLocation(name) .. " despawned.", 15)
 end
