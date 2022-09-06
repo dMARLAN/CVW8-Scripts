@@ -23,6 +23,7 @@ RADIOS = {
 
 TANKERS = {
     SPEED = 280,
+    RACETRACK_DISTANCE = 15,
     TO11 = {
         TCN_FREQ = 41,
         TCN_ID = "TO1",
@@ -66,5 +67,6 @@ TANKERS = {
 }
 
 AWACS = {
-    SPEED = 260
+    SPEED = 260,
+    RACETRACK_DISTANCE = 40
 }
