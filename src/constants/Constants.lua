@@ -47,6 +47,10 @@ TANKERS = {
         BTN = RADIOS.BTN_17,
         ALT = 23000
     },
+    AO42 = {
+        BTN = 267.100,
+        ALT = 23000
+    },
     SL51 = {
         TCN_FREQ = 45,
         TCN_ID = "SL5",
