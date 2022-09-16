@@ -1,10 +1,11 @@
---------------------
---- Tanker Track ---
---------------------
+---------------------
+--- Tanker Tracks ---
+---------------------
 
 local TO_TRACK = "ROCKHOPPER Track"
 local AO_TRACK = "PINTAIL Track"
 local AGR_AO_TRACK = "GENTOO Track"
+local AGR_TO_TRACK = "ALBATROSS Track"
 
 --- TEXACO 11
 local TO11 = RECOVERYTANKER:New(TO_TRACK, "TO11")
@@ -60,9 +61,19 @@ AO42:SetSpeed(UTILS.KnotsToAltKIAS(TANKERS.SPEED, TANKERS.AO42.ALT))
 AO42:SetRacetrackDistances(TANKERS.RACETRACK_DISTANCE, 0)
 AO42:__Start(30)
 
---------------------
---- AWACS Track ----
---------------------
+--- TEXACO 22
+local TO22 = RECOVERYTANKER:New(AGR_TO_TRACK, "TO22")
+TO22:SetCallsign(CALLSIGN.Tanker.Texaco, 2)
+TO22:SetTakeoffAir()
+TO22:SetAltitude(TANKERS.TO22.ALT)
+TO22:SetRadio(TANKERS.TO22.BTN)
+TO22:SetSpeed(UTILS.KnotsToAltKIAS(TANKERS.SPEED, TANKERS.TO22.ALT))
+TO22:SetRacetrackDistances(TANKERS.RACETRACK_DISTANCE, 0)
+TO22:__Start(30)
+
+---------------------
+--- AWACS Tracks ----
+---------------------
 
 --- DARKSTAR
 local ODR1 = RECOVERYTANKER:New("TYRANT Track", "ODR1")
