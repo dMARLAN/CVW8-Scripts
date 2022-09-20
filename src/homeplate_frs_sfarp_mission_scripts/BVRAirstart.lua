@@ -12,6 +12,17 @@ function spawn(groupNames)
 end
 
 function reset()
+    local allGroupNames = {"BVR (Airstart) Red Single",
+                           "BVR (Airstart) Red Azimuth North",
+                           "BVR (Airstart) Red Azimuth South",
+                           "BVR (Airstart) Red Ladder Lead",
+                           "BVR (Airstart) Red Ladder Trail",
+                           "BVR (Airstart) Red Single SAR-1"}
+    for _, groupName in pairs(allGroupNames) do
+        if (Group.getByName(groupName)) then
+            Group.destroy(Group.getByName(groupName))
+        end
+    end
 end
 
 function menuHandler:onEvent(event)
@@ -32,41 +43,41 @@ function createGroupSpecificMenus(groupId)
 
     local singleGroupCommandName = "Spawn Single Group (SAR-2)"
     local singleGroupGroupsToSpawn = {"BVR (Airstart) Red Single"}
-    missionCommands.addCommandForGroup(singleGroupCommandName,  bvrAirstartMenu[groupId], spawn, singleGroupGroupsToSpawn)
+    missionCommands.addCommandForGroup(groupId, singleGroupCommandName,  bvrAirstartMenu[groupId], spawn, singleGroupGroupsToSpawn)
 
     local azimuthCommandName = "Spawn Azimuth (SAR-2)"
     local azimuthGroupsToSpawn = {"BVR (Airstart) Red Azimuth North", "BVR (Airstart) Red Azimuth South"}
-    missionCommands.addCommandForGroup(azimuthCommandName,  bvrAirstartMenu[groupId], spawn, azimuthGroupsToSpawn)
+    missionCommands.addCommandForGroup(groupId, azimuthCommandName,  bvrAirstartMenu[groupId], spawn, azimuthGroupsToSpawn)
 
     local rangeCommandName = "Spawn Range (SAR-2)"
     local rangeGroupsToSpawn = {"BVR (Airstart) Red Ladder Lead", "BVR (Airstart) Red Single"}
-    missionCommands.addCommandForGroup(rangeCommandName,  bvrAirstartMenu[groupId], spawn, rangeGroupsToSpawn)
+    missionCommands.addCommandForGroup(groupId, rangeCommandName,  bvrAirstartMenu[groupId], spawn, rangeGroupsToSpawn)
 
     local wallCommandName = "Spawn Wall (SAR-2)"
     local wallGroupsToSpawn = {"BVR (Airstart) Red Azimuth North", "BVR (Airstart) Red Azimuth South", "BVR (Airstart) Red Single"}
-    missionCommands.addCommandForGroup(wallCommandName,  bvrAirstartMenu[groupId], spawn, wallGroupsToSpawn)
+    missionCommands.addCommandForGroup(groupId, wallCommandName,  bvrAirstartMenu[groupId], spawn, wallGroupsToSpawn)
 
     local ladderCommandName = "Spawn Ladder (SAR-2)"
     local ladderGroupsToSpawn = {"BVR (Airstart) Red Ladder Lead", "BVR (Airstart) Red Single", "BVR (Airstart) Red Ladder Trail"}
-    missionCommands.addCommandForGroup(ladderCommandName,  bvrAirstartMenu[groupId], spawn, ladderGroupsToSpawn)
+    missionCommands.addCommandForGroup(groupId, ladderCommandName,  bvrAirstartMenu[groupId], spawn, ladderGroupsToSpawn)
 
     local vicCommandName = "Spawn Vic (SAR-2)"
     local vicGroupsToSpawn = {"BVR (Airstart) Red Ladder Lead", "BVR (Airstart) Red Azimuth North", "BVR (Airstart) Red Azimuth South"}
-    missionCommands.addCommandForGroup(vicCommandName,  bvrAirstartMenu[groupId], spawn, vicGroupsToSpawn)
+    missionCommands.addCommandForGroup(groupId, vicCommandName,  bvrAirstartMenu[groupId], spawn, vicGroupsToSpawn)
 
     local champagneCommandName = "Spawn Champagne (SAR-2)"
     local champagneGroupsToSpawn = {"BVR (Airstart) Red Ladder Trail", "BVR (Airstart) Red Azimuth North", "BVR (Airstart) Red Azimuth South"}
-    missionCommands.addCommandForGroup(champagneCommandName,  bvrAirstartMenu[groupId], spawn, champagneGroupsToSpawn)
+    missionCommands.addCommandForGroup(groupId, champagneCommandName,  bvrAirstartMenu[groupId], spawn, champagneGroupsToSpawn)
 
     local heavySarOneSingleGroupCommandName = "Spawn Single Group (Heavy, SAR-1)"
     local heavySarOneSingleGroupGroupsToSpawn = {"BVR (Airstart) Red Single SAR-1"}
-    missionCommands.addCommandForGroup(heavySarOneSingleGroupCommandName,  bvrAirstartMenu[groupId], spawn, heavySarOneSingleGroupGroupsToSpawn)
+    missionCommands.addCommandForGroup(groupId, heavySarOneSingleGroupCommandName,  bvrAirstartMenu[groupId], spawn, heavySarOneSingleGroupGroupsToSpawn)
 
     local resetCommandName = "Reset"
-    missionCommands.addCommandForGroup(resetCommandName,  bvrAirstartMenu[groupId], reset)
+    missionCommands.addCommandForGroup(groupId, resetCommandName,  bvrAirstartMenu[groupId], reset)
 end
 
 local function main()
-    world.addEventHandler(groupMenuHandler)
+    world.addEventHandler(menuHandler)
 end
 main()
