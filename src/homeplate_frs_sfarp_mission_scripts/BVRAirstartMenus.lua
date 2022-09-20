@@ -1,5 +1,6 @@
 local HORNET_GROUP_NAME = "BVR (Airstart) Blue Hornets"
 local TOMCAT_GROUP_NAME = "BVR (Airstart) Blue Tomcats"
+local GROUPS_WITH_MENU = { HORNET_GROUP_NAME, TOMCAT_GROUP_NAME }
 
 local RED_SINGLE = "BVR (Airstart) Red Center"
 local RED_NORTH = "BVR (Airstart) Red North"
@@ -11,7 +12,7 @@ local ALL_RED_GROUPS = { RED_SINGLE, RED_NORTH, RED_SOUTH, RED_LEAD, RED_TRAIL, 
 
 local bvrAirstartMenu = {}
 local menuHandler = {}
-local spawn, reset, createGroupSpecificMenus
+local spawn, reset, createGroupSpecificMenus, matchAnyName
 
 function spawn(groupNames)
     for _, groupName in pairs(groupNames) do
@@ -30,7 +31,7 @@ end
 
 function menuHandler:onEvent(event)
     if event.id == world.event.S_EVENT_BIRTH and event.initiator:getPlayerName() ~= nil then
-        if (Group.getName(event.initiator:getGroup()) == HORNET_GROUP_NAME) or (Group.getName(event.initiator:getGroup()) == TOMCAT_GROUP_NAME) then
+        if matchAnyName(Group.getName(event.initiator:getGroup()), GROUPS_WITH_MENU)  then
             local group = event.initiator:getGroup()
             local groupId = Group.getID(group)
             if bvrAirstartMenu[groupId] == nil then
@@ -38,6 +39,15 @@ function menuHandler:onEvent(event)
             end
         end
     end
+end
+
+function matchAnyName(groupNameToCheck, namesTable)
+    for _, name in pairs(namesTable) do
+        if groupNameToCheck == name then
+            return true
+        end
+    end
+    return false
 end
 
 function createGroupSpecificMenus(groupId)
