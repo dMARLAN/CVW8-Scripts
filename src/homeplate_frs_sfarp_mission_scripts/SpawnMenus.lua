@@ -142,9 +142,9 @@ end
 --- @param groupsWithUndefinedLocation table
 function generateMenus(locations, groupsWithUndefinedLocation)
     if (next(locations) ~= nil or next(groupsWithUndefinedLocation) ~= nil) then
-        local mainMenu = missionCommands.addSubMenu("Spawning Menu")
+        local spawningMenu = missionCommands.addSubMenu("Spawning Menu")
         for _, location in pairs(locations) do
-            local locationMenu = missionCommands.addSubMenu(removeSymbols(location.name), mainMenu)
+            local locationMenu = missionCommands.addSubMenu(removeSymbols(location.name), spawningMenu)
             for _, group in pairs(location.groups) do
                 local locationGroupMenu = missionCommands.addSubMenu(removeSymbols(group), locationMenu)
                 missionCommands.addCommand("Spawn", locationGroupMenu, spawn, group)
@@ -152,7 +152,7 @@ function generateMenus(locations, groupsWithUndefinedLocation)
             end
         end
         if (#groupsWithUndefinedLocation > 0) then
-            local undefinedLocationMenu = missionCommands.addSubMenu("Undefined", mainMenu)
+            local undefinedLocationMenu = missionCommands.addSubMenu("Undefined", spawningMenu)
             for i = 1, #groupsWithUndefinedLocation do
                 local undefinedLocationGroupMenu = missionCommands.addSubMenu(removeSymbols(groupsWithUndefinedLocation[i]), undefinedLocationMenu)
                 missionCommands.addCommand("Spawn", undefinedLocationGroupMenu, spawn, groupsWithUndefinedLocation[i])
