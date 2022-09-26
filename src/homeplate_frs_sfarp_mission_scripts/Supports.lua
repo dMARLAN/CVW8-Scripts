@@ -2,13 +2,15 @@
 --- Tanker Tracks ---
 ---------------------
 
-local TO_TRACK = "ROCKHOPPER Track"
-local AO_TRACK = "PINTAIL Track"
+local TO11_TRACK = "ROCKHOPPER Track"
+local TO21_TRACK = "WRENS Track"
+local AO31_TRACK = "PINTAIL Track"
+local AO41_TRACK = "MAGELLAN Track"
 local AGR_AO_TRACK = "GENTOO Track"
 local AGR_TO_TRACK = "ALBATROSS Track"
 
 --- TEXACO 11
-local TO11 = RECOVERYTANKER:New(TO_TRACK, "TO11")
+local TO11 = RECOVERYTANKER:New(TO11_TRACK, "TO11")
 TO11:SetCallsign(CALLSIGN.Tanker.Texaco, 1)
 TO11:SetTakeoffAir()
 TO11:SetAltitude(TANKERS.TO11.ALT)
@@ -16,10 +18,10 @@ TO11:SetRadio(TANKERS.TO11.BTN)
 TO11:SetSpeed(UTILS.KnotsToAltKIAS(TANKERS.SPEED, TANKERS.TO11.ALT))
 TO11:SetTACAN(TANKERS.TO11.TCN_FREQ, TANKERS.TO11.TCN_ID)
 TO11:SetRacetrackDistances(TANKERS.RACETRACK_DISTANCE, 0)
-TO11:__Start(5)
+TO11:__Start(math.random(1,5))
 
 --- TEXACO 21
-local TO21 = RECOVERYTANKER:New(TO_TRACK, "TO21")
+local TO21 = RECOVERYTANKER:New(TO21_TRACK, "TO21")
 TO21:SetCallsign(CALLSIGN.Tanker.Texaco, 2)
 TO21:SetTakeoffAir()
 TO21:SetAltitude(TANKERS.TO21.ALT)
@@ -27,10 +29,10 @@ TO21:SetRadio(TANKERS.TO21.BTN)
 TO21:SetSpeed(UTILS.KnotsToAltKIAS(TANKERS.SPEED, TANKERS.TO21.ALT))
 TO21:SetTACAN(TANKERS.TO21.TCN_FREQ, TANKERS.TO21.TCN_ID)
 TO21:SetRacetrackDistances(TANKERS.RACETRACK_DISTANCE, 0)
-TO21:__Start(45)
+TO21:__Start(math.random(1,5))
 
 --- ARCO 31
-local AO31 = RECOVERYTANKER:New(AO_TRACK, "AO31")
+local AO31 = RECOVERYTANKER:New(AO31_TRACK, "AO31")
 AO31:SetCallsign(CALLSIGN.Tanker.Arco, 3)
 AO31:SetTakeoffAir()
 AO31:SetAltitude(TANKERS.AO31.ALT)
@@ -38,10 +40,10 @@ AO31:SetRadio(TANKERS.AO31.BTN)
 AO31:SetSpeed(UTILS.KnotsToAltKIAS(TANKERS.SPEED, TANKERS.AO31.ALT))
 AO31:SetTACAN(TANKERS.AO31.TCN_FREQ, TANKERS.AO31.TCN_ID)
 AO31:SetRacetrackDistances(TANKERS.RACETRACK_DISTANCE, 0)
-AO31:__Start(5)
+AO31:__Start(math.random(1,5))
 
 --- ARCO 41
-local AO41 = RECOVERYTANKER:New(AO_TRACK, "AO41")
+local AO41 = RECOVERYTANKER:New(AO41_TRACK, "AO41")
 AO41:SetCallsign(CALLSIGN.Tanker.Arco, 4)
 AO41:SetTakeoffAir()
 AO41:SetAltitude(TANKERS.AO41.ALT)
@@ -49,7 +51,7 @@ AO41:SetRadio(TANKERS.AO41.BTN)
 AO41:SetSpeed(UTILS.KnotsToAltKIAS(TANKERS.SPEED, TANKERS.AO41.ALT))
 AO41:SetTACAN(TANKERS.AO41.TCN_FREQ, TANKERS.AO41.TCN_ID)
 AO41:SetRacetrackDistances(TANKERS.RACETRACK_DISTANCE, 0)
-AO41:__Start(45)
+AO41:__Start(math.random(1,5))
 
 --- ARCO 42
 local AO42 = RECOVERYTANKER:New(AGR_AO_TRACK, "AO42")
@@ -59,7 +61,7 @@ AO42:SetAltitude(TANKERS.AO42.ALT)
 AO42:SetRadio(TANKERS.AO42.BTN)
 AO42:SetSpeed(UTILS.KnotsToAltKIAS(TANKERS.SPEED, TANKERS.AO42.ALT))
 AO42:SetRacetrackDistances(TANKERS.RACETRACK_DISTANCE, 0)
-AO42:__Start(30)
+AO42:__Start(math.random(1,5))
 
 --- TEXACO 22
 local TO22 = RECOVERYTANKER:New(AGR_TO_TRACK, "TO22")
@@ -69,7 +71,7 @@ TO22:SetAltitude(TANKERS.TO22.ALT)
 TO22:SetRadio(TANKERS.TO22.BTN)
 TO22:SetSpeed(UTILS.KnotsToAltKIAS(TANKERS.SPEED, TANKERS.TO22.ALT))
 TO22:SetRacetrackDistances(TANKERS.RACETRACK_DISTANCE, 0)
-TO22:__Start(30)
+TO22:__Start(math.random(1,5))
 
 ---------------------
 --- AWACS Tracks ----
@@ -85,7 +87,7 @@ ODR1:SetAltitude(ODR1_alt)
 ODR1:SetRadio(RADIOS.BTN_9)
 ODR1:SetSpeed(UTILS.KnotsToAltKIAS(AWACS.SPEED, ODR1_alt))
 ODR1:SetRacetrackDistances(AWACS.RACETRACK_DISTANCE, 0)
-ODR1:__Start(5)
+ODR1:__Start(math.random(1,5))
 
 --- FOCUS
 local OFS1 = RECOVERYTANKER:New("TYRANT Track", "OFS1")
@@ -97,7 +99,7 @@ OFS1:SetAltitude(OFS1_alt)
 OFS1:SetRadio(RADIOS.BTN_10)
 OFS1:SetSpeed(UTILS.KnotsToAltKIAS(AWACS.SPEED, OFS1_alt))
 OFS1:SetRacetrackDistances(AWACS.RACETRACK_DISTANCE, 0)
-OFS1:__Start(300)
+OFS1:__Start(math.random(1,5) + 300)
 
 --- WIZARD (Red Human AWACS)
 local OWD1 = RECOVERYTANKER:New("CARACARA Track", "OWD1")
@@ -109,7 +111,7 @@ OWD1:SetAltitude(OWD1_alt)
 OWD1:SetRadio(255.1)
 OWD1:SetSpeed(UTILS.KnotsToAltKIAS(AWACS.SPEED, OWD1_alt))
 OWD1:SetRacetrackDistances(AWACS.RACETRACK_DISTANCE, 0)
-OWD1:__Start(5)
+OWD1:__Start(math.random(1,5))
 
 --- OVERLORD (Red AI AWACS)
 local OOD1 = RECOVERYTANKER:New("VULTURE Track", "OOD1")
@@ -120,4 +122,4 @@ OOD1:SetTakeoffAir()
 OOD1:SetAltitude(OOD1_alt)
 OOD1:SetSpeed(UTILS.KnotsToAltKIAS(AWACS.SPEED, OOD1_alt))
 OOD1:SetRacetrackDistances(AWACS.RACETRACK_DISTANCE, 0)
-OOD1:__Start(10)
+OOD1:__Start(math.random(1,5))
