@@ -1,5 +1,7 @@
 local shipNames = {}
 local shotHandler = {}
+local messagesToSend = {}
+local messagePlaying = false
 local addShip
 local freqs = "255,262,259,268"
 local freqMod = "AM,AM,AM,AM"
@@ -28,16 +30,16 @@ end
 local function bearingToSingleDigits(bearing)
     local bearingString = ""
     if ( bearing < 100) then
-        bearingString = bearingString .. "ZERO-"
+        bearingString = bearingString .. "ZERO "
     end
     if ( bearing < 10) then
-        bearingString = bearingString .. "ZERO-ZERO-"
+        bearingString = bearingString .. "ZERO ZERO "
     end
     for i = 1, string.len(bearing) do
         if (string.sub(bearing, i, i) == "0") then
-            bearingString = bearingString .. "ZERO-"
+            bearingString = bearingString .. "ZERO "
         else
-            bearingString = bearingString .. string.sub(bearing, i, i) .. "-"
+            bearingString = bearingString .. string.sub(bearing, i, i) .. " "
         end
     end
     return bearingString
@@ -85,10 +87,10 @@ local function getBullseye(target)
     local distanceNm = math.floor(getDistanceFromTwoPoints(bullsLO, target:getPoint()) / 1852)
 
     if (distanceNm < 5) then
-        return ", AT BULLSEYE "
+        return ", AT BULLSEYE.."
     end
 
-    local bearing = math.floor(getBearingFromTwoPoints(bullsLO, target:getPoint()) - getMagneticDeclination() * 2)
+    local bearing = (math.floor(getBearingFromTwoPoints(bullsLO, target:getPoint()) - getMagneticDeclination() * 2) + 360) % 360
     local bearingString = bearingToSingleDigits(bearing)
 
     return "BULLSEYE, " .. bearingString .. " , " .. distanceNm .. ", "
@@ -159,15 +161,36 @@ local function buildMessage(shipCallsign, bullseye, impact)
     return table.concat(msg)
 end
 
+local function playMessage(message, shipCallsign, initiatorPoint)
+    STTS.TextToSpeech(message, freqs, freqMod, "1.0", shipCallsign, coalition.side.BLUE, initiatorPoint, 1, "male", "en-US", "en-US-Standard-J", true)
+end
+
+local function messagePlayingFalse()
+    messagePlaying = false
+end
+
+local function checkMessagesToSend()
+    if (#messagesToSend == 0) or messagePlaying then
+        return
+    end
+    messagePlaying = true
+    local speechTime = STTS.getSpeechTime(messagesToSend[1][1], 1, true)
+    playMessage(messagesToSend[1][1], messagesToSend[1][2], messagesToSend[1][3])
+    table.remove(messagesToSend, 1)
+    timer.scheduleFunction(messagePlayingFalse, nil, timer.getTime() + speechTime)
+    timer.scheduleFunction(checkMessagesToSend, nil, timer.getTime() + speechTime)
+end
+
 function shotHandler:onEvent(event)
     if event.id == world.event.S_EVENT_SHOT and event.weapon:getTarget() and isASpecifiedShip(event.initiator) then
         local target = event.weapon:getTarget()
+        local initiatorPoint = event.initiator:getPoint()
         local shipCallsign = shipNames[Unit.getName(event.initiator)]
         local bullseye = getBullseye(target)
         local impact = getImpact(event.initiator, target)
         local message = buildMessage(shipCallsign, bullseye, impact)
-        trigger.action.outText(STTS.getSpeechTime(message, 1, true),10)
-        STTS.TextToSpeech(message, freqs, freqMod, "1.0", shipCallsign, coalition.side.BLUE, event.initiator:getPoint(), 1, "male", "en-US", "en-US-Standard-J", true)
+        table.insert(messagesToSend, {message, shipCallsign, initiatorPoint})
+        checkMessagesToSend()
     end
 end
 
