@@ -1,4 +1,10 @@
+
+-- Insert ship names that will be checked for missile launches below.
 local shipNames = {}
+shipNames["CSGAD1"] = "KILO" -- shipNames[UNIT NAME] = CALLSIGN
+shipNames["CSGAD2"] = "LIMA" -- shipNames[UNIT NAME] = CALLSIGN
+
+---------- DO NOT EDIT BELOW THIS LINE ----------
 local shotHandler = {}
 local messagesToSend = {}
 local messagePlaying = false
@@ -195,8 +201,6 @@ function shotHandler:onEvent(event)
 end
 
 local function main()
-    addShip("CSGAD1", "KILO") -- GROUPNAME, CALLSIGN
-    addShip("CSGAD2", "LIMA") -- GROUPNAME, CALLSIGN
     world.addEventHandler(shotHandler)
 end
 main()
