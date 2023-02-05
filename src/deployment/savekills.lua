@@ -1,29 +1,47 @@
 local unitDestroyedHandler = {}
+CVW8Scripts = {}
+CVW8Scripts.SCRIPTS_PATH = lfs.writedir() .. "Missions\\" .. "kill_tracker_test_folder"
+local trackedUnits = {}
 
 local function addUnitToKillTrackerFile(destroyedUnitName)
-    local killTrackerFile = io.open(CVW8Scripts.SCRIPTS_PATH .. "\\data\\" .. "kills_tracker.txt", "a")
+    for _, unitName in pairs(trackedUnits) do
+        if unitName == destroyedUnitName then
+            return
+        end
+    end
+
+    local dataPath = CVW8Scripts.SCRIPTS_PATH .. "\\data\\"
+    local fileName = dataPath .. "kills_tracker.txt"
+
+    if not lfs.attributes(dataPath) then
+        lfs.mkdir(dataPath)
+    end
+
+    local killTrackerFile = io.open(fileName, "a")
     io.write(killTrackerFile, destroyedUnitName .. "\n")
     io.flush(killTrackerFile)
     io.close(killTrackerFile)
-    trigger.action.outText("Added unit to kill tracker: " .. destroyedUnitName, 5)
 end
 
 function unitDestroyedHandler:onEvent(event)
-    -- Gets hit event on any player
-    if event.id == world.event.S_EVENT_DEAD and event.initiator:getGroup():getCoalition() == coalition.side.RED then
-        local destroyedUnitName = event.initiator:getUnit():getName()
-        addUnitToKillTrackerFile(destroyedUnitName)
+    if event.id == world.event.S_EVENT_DEAD then
+        if event.initiator ~= nil and
+                event.initiator:getCategory() == Object.Category.UNIT and
+                event.initiator:getCoalition() == coalition.side.RED then
+            local destroyedUnitName = event.initiator:getName()
+            addUnitToKillTrackerFile(destroyedUnitName)
+        end
     end
 end
 
 local function destroyAllTrackedUnits()
     local killTrackerFile = io.open(CVW8Scripts.SCRIPTS_PATH .. "\\data\\" .. "kills_tracker.txt", "r")
     if killTrackerFile ~= nil then
-        for line in io.lines(CVW8Scripts.SCRIPTS_PATH .. "\\data\\" .. "kills_tracker.txt") do
+        for line in killTrackerFile:lines() do
             local unit = Unit.getByName(line)
             if unit ~= nil then
+                trackedUnits[#trackedUnits + 1] = unit
                 unit:destroy()
-                trigger.action.outText("Destroyed unit: " .. line, 5)
             end
         end
         io.close(killTrackerFile)
