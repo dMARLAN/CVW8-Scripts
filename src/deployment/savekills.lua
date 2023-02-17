@@ -1,6 +1,4 @@
 local unitDestroyedHandler = {}
-CVW8Scripts = {}
-CVW8Scripts.SCRIPTS_PATH = lfs.writedir() .. "Missions\\" .. "kill_tracker_test_folder"
 local trackedUnits = {}
 
 local function addUnitToKillTrackerFile(destroyedUnitName)
