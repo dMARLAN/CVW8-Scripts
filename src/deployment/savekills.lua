@@ -11,10 +11,6 @@ local function addUnitToKillTrackerFile(destroyedUnitName)
         end
     end
 
-    if not lfs.attributes(DATA_PATH) then
-        lfs.mkdir(DATA_PATH)
-    end
-
     local killTrackerFile = io.open(DATA_PATH .. FILE_NAME, "a")
     io.write(killTrackerFile, destroyedUnitName .. "\n")
     io.flush(killTrackerFile)
@@ -46,8 +42,15 @@ local function destroyAllTrackedUnits()
     end
 end
 
+local function createDataFolderIfNotExist()
+    if not lfs.attributes(DATA_PATH) then
+        lfs.mkdir(DATA_PATH)
+    end
+end
+
 local function main()
     world.addEventHandler(unitDestroyedHandler)
+    createDataFolderIfNotExist()
     destroyAllTrackedUnits()
 end
 main()
