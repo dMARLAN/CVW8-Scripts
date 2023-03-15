@@ -1,6 +1,9 @@
 local unitDestroyedHandler = {}
 local trackedUnits = {}
 
+local DATA_PATH = CVW8Scripts.SCRIPTS_PATH .. "\\data\\"
+local FILE_NAME = "kills_tracker.txt"
+
 local function addUnitToKillTrackerFile(destroyedUnitName)
     for _, unitName in pairs(trackedUnits) do
         if unitName == destroyedUnitName then
@@ -8,14 +11,11 @@ local function addUnitToKillTrackerFile(destroyedUnitName)
         end
     end
 
-    local dataPath = CVW8Scripts.SCRIPTS_PATH .. "\\data\\"
-    local fileName = dataPath .. "kills_tracker.txt"
-
-    if not lfs.attributes(dataPath) then
-        lfs.mkdir(dataPath)
+    if not lfs.attributes(DATA_PATH) then
+        lfs.mkdir(DATA_PATH)
     end
 
-    local killTrackerFile = io.open(fileName, "a")
+    local killTrackerFile = io.open(DATA_PATH .. FILE_NAME, "a")
     io.write(killTrackerFile, destroyedUnitName .. "\n")
     io.flush(killTrackerFile)
     io.close(killTrackerFile)
@@ -33,7 +33,7 @@ function unitDestroyedHandler:onEvent(event)
 end
 
 local function destroyAllTrackedUnits()
-    local killTrackerFile = io.open(CVW8Scripts.SCRIPTS_PATH .. "\\data\\" .. "kills_tracker.txt", "r")
+    local killTrackerFile = io.open(DATA_PATH .. FILE_NAME, "r")
     if killTrackerFile ~= nil then
         for line in killTrackerFile:lines() do
             local unit = Unit.getByName(line)
