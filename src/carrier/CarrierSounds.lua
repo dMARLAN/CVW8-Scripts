@@ -44,6 +44,7 @@ local function getEventWindows()
         local eventWindowTimeAbsSeconds = firstEventAbsTimeSecs + (i * cyclicLength * 60)
         table.insert(eventWindows, eventWindowTimeAbsSeconds)
     end
+    return eventWindows
 end
 
 local function main()
