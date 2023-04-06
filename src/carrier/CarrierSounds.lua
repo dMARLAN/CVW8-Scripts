@@ -2,7 +2,7 @@ local PRE_EVENT_TIME = DCSDynamicWeather.JSON.getValue("pre_event_time", DCSDyna
 local RECOVERY_DURATION = DCSDynamicWeather.JSON.getValue("recovery_duration", DCSDynamicWeather.CONFIG_PATH)
 
 local SOUND_DIRECTORY = "Sounds/"
-local START_UP_SOUND = SOUND_DIRECTORY ..  "SpoolCASEIStarts.ogg"
+local START_UP_SOUND = SOUND_DIRECTORY ..  "SpoolCaseIStarts.ogg"
 local SHOOT_EM_SOUND = SOUND_DIRECTORY .. "SpoolShootEm.ogg"
 local LENS_ON_SOUND = SOUND_DIRECTORY .. "SpoolLensOn.ogg"
 local RECOVERY_COMPLETE_SOUND = SOUND_DIRECTORY .. "SpoolRecoveryComplete.ogg"
