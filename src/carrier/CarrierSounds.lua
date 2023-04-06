@@ -52,7 +52,7 @@ local function main()
     for _, eventWindowTimeAbsSeconds in pairs(eventWindows) do
         scheduleRadioSound(eventWindowTimeAbsSeconds - PRE_EVENT_TIME + 180, START_UP_SOUND)
         scheduleRadioSound(eventWindowTimeAbsSeconds - 60, SHOOT_EM_SOUND)
-        scheduleRadioSound(eventWindowTimeAbsSeconds, LENS_ON_SOUND)
+        scheduleRadioSound(eventWindowTimeAbsSeconds - 15, LENS_ON_SOUND)
         scheduleRadioSound(eventWindowTimeAbsSeconds + RECOVERY_DURATION, RECOVERY_COMPLETE_SOUND)
     end
 end
