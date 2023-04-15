@@ -1,17 +1,16 @@
+--- Depends on SimpleRadioStandalone STTS module
+
+local PATH_TO_SOUNDS = "C:\\Program Files\\DCS-SimpleRadio-Standalone\\Sounds\\"
+local FREQS = RADIOS.BTN_1 .. "," .. RADIOS.BTN_8
+local MODULATION = "AM, AM"
+
+local START_UP_SOUND = "SpoolCaseIStarts.ogg"
+local SHOOT_EM_SOUND = "SpoolShootEm.ogg"
+local LENS_ON_SOUND = "SpoolLensOn.ogg"
+local RECOVERY_COMPLETE_SOUND = "SpoolRecoveryComplete.ogg"
+
 local PRE_EVENT_TIME = DCSDynamicWeather.JSON.getValue("pre_event_time", DCSDynamicWeather.CONFIG_PATH)
 local RECOVERY_DURATION = DCSDynamicWeather.JSON.getValue("recovery_duration", DCSDynamicWeather.CONFIG_PATH)
-
-local SOUND_DIRECTORY = "Sounds/"
-local START_UP_SOUND = SOUND_DIRECTORY ..  "SpoolCaseIStarts.ogg"
-local SHOOT_EM_SOUND = SOUND_DIRECTORY .. "SpoolShootEm.ogg"
-local LENS_ON_SOUND = SOUND_DIRECTORY .. "SpoolLensOn.ogg"
-local RECOVERY_COMPLETE_SOUND = SOUND_DIRECTORY .. "SpoolRecoveryComplete.ogg"
-
-local CARRIER_NAME = "USS Roosevelt" -- This should be automatically gotten eventually.
-
-local function convertRadioFreqStringToInt(radioFreqStr)
-    return tonumber(string.gsub(radioFreqStr, "%.", "") .. "000")
-end
 
 local function scheduleRadioSound(playTime, soundFileName)
     local currentTime = timer.getAbsTime()
@@ -20,14 +19,13 @@ local function scheduleRadioSound(playTime, soundFileName)
     end
 
     local playSoundFunction = function()
-        trigger.action.outSound(soundFileName)
-        trigger.action.radioTransmission(
-                soundFileName,
-                Unit.getByName(CARRIER_NAME):getPoint(),
-                0,
-                false,
-                convertRadioFreqStringToInt(RADIOS.BTN_1),
-                100
+        STTS.PlayMP3(
+                PATH_TO_SOUNDS .. soundFileName,
+                FREQS,
+                MODULATION,
+                "1",
+                "Airboss",
+                2
         )
     end
 
