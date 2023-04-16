@@ -2,7 +2,7 @@
 
 local PATH_TO_SOUNDS = "C:\\Program Files\\DCS-SimpleRadio-Standalone\\Sounds\\"
 local FREQS = RADIOS.BTN_1 .. "," .. RADIOS.BTN_8
-local MODULATION = "AM, AM"
+local MODULATION = "AM,AM"
 
 local START_UP_SOUND = "SpoolCaseIStarts.ogg"
 local SHOOT_EM_SOUND = "SpoolShootEm.ogg"
